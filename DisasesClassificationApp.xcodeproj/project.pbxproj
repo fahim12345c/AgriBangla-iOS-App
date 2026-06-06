@@ -63,6 +63,7 @@
 		DDB045D02FA9BF56002EA282 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = DDB045CF2FA9BF56002EA282 /* GoogleSignIn */; };
 		DDB045D22FA9BF56002EA282 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DDB045D12FA9BF56002EA282 /* GoogleSignInSwift */; };
 		DDB045D42FA9C13E002EA282 /* GoogleSignInManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB045D32FA9C13E002EA282 /* GoogleSignInManager.swift */; };
+		DDBAF90B2FD3DEE200460D18 /* DeepSeekService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBAF90A2FD3DEE200460D18 /* DeepSeekService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -109,6 +110,7 @@
 		DDA658CB2F000015003137CE /* WeatherLegendSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherLegendSheetView.swift; sourceTree = "<group>"; };
 		DDB045CC2FA9B66F002EA282 /* Info/GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DDB045D32FA9C13E002EA282 /* GoogleSignInManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInManager.swift; sourceTree = "<group>"; };
+		DDBAF90A2FD3DEE200460D18 /* DeepSeekService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepSeekService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				DD1C749F2FD2EFF1008CA008 /* GeminiService.swift */,
+				DDBAF90A2FD3DEE200460D18 /* DeepSeekService.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -534,6 +537,7 @@
 				DD2885EC2FA98F2500176DC7 /* LoginView.swift in Sources */,
 				DD8E724D2FA8F0220005D254 /* MangoTextField.swift in Sources */,
 				7964F91532816EA9DA5A4C13 /* DrawerViewModel.swift in Sources */,
+				DDBAF90B2FD3DEE200460D18 /* DeepSeekService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

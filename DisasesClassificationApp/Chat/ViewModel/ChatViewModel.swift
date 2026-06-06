@@ -6,51 +6,95 @@ final class ChatViewModel: ObservableObject {
     @Published var messages: [ChatMessage] = []
     @Published var inputText: String = ""
     @Published var isLoading = false
+    @Published var activeProvider: AIProvider = .gemini  // shown in UI if desired
 
     private let geminiService: GeminiService
+    private let deepSeekService: DeepSeekService
 
-    init(geminiService: GeminiService = .shared) {
+    init(
+        geminiService: GeminiService = .shared,
+        deepSeekService: DeepSeekService = .shared
+    ) {
         self.geminiService = geminiService
+        self.deepSeekService = deepSeekService
         messages.append(
             ChatMessage(
                 role: .assistant,
-                content: "👋 সালাম! আমি আপনার কৃষি সহায়ক। ফসল, রোগ, আবহাওয়া বা সার সংক্রান্ত যেকোনো প্রশ্ন করতে পারেন। আমি বাংলায় সহজ করে বুঝিয়ে বলবো। 🌾"
+                content: "👋 সালাম! আমি আপনার কৃষি সহায়ক। ফসল, রোগ, আবহাওয়া বা সার সংক্রান্ত যেকোনো প্রশ্ন করতে পারেন। আমি বাংলায় সহজ করে বুঝিয়ে বলবো। 🌾",
+                provider: .none
             )
         )
     }
+
+    // MARK: - Send
 
     func sendMessage() {
         let text = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty, !isLoading else { return }
 
-        messages.append(ChatMessage(role: .user, content: text))
+        messages.append(ChatMessage(role: .user, content: text, provider: .none))
         inputText = ""
         isLoading = true
 
         Task {
             defer { isLoading = false }
-            do {
-                let response = try await geminiService.sendMessage(text)
-                messages.append(ChatMessage(role: .assistant, content: response))
-            } catch let error as ChatError {
-                // Shows the real API error so you can debug
-                let errorText: String
-                switch error {
-                case .httpError(let code, let msg):
-                    errorText = "⚠️ API Error \(code): \(msg)"
-                case .noResponse:
-                    errorText = "⚠️ দুঃখিত, কোনো উত্তর পাওয়া যায়নি। আবার চেষ্টা করুন।"
-                case .networkError(let e):
-                    errorText = "⚠️ নেটওয়ার্ক সমস্যা: \(e.localizedDescription)"
-                case .invalidURL:
-                    errorText = "⚠️ Invalid URL configuration."
-                }
-                messages.append(ChatMessage(role: .assistant, content: errorText))
-            } catch {
-                messages.append(
-                    ChatMessage(role: .assistant, content: "⚠️ অজানা সমস্যা: \(error.localizedDescription)")
-                )
-            }
+            await resolveResponse(for: text)
         }
+    }
+
+    // MARK: - Resolution chain: Gemini → DeepSeek
+
+    private func resolveResponse(for text: String) async {
+        // 1️⃣ Try Gemini first
+        do {
+            let response = try await geminiService.sendMessage(text)
+            activeProvider = .gemini
+            messages.append(ChatMessage(role: .assistant, content: response, provider: .gemini))
+            return
+        } catch ChatError.quotaExhausted {
+            // Gemini quota exhausted across all models → fall through to DeepSeek
+            print("⚠️ Gemini quota exhausted — falling back to DeepSeek")
+        } catch {
+            // Any other Gemini error (network, 400, etc.) — show immediately, don't try DeepSeek
+            appendError(error, provider: .gemini)
+            return
+        }
+
+        // 2️⃣ Gemini quota exhausted → try DeepSeek
+        do {
+            let response = try await deepSeekService.sendMessage(text)
+            activeProvider = .deepSeek
+            // Subtle notice so the user knows a fallback was used (optional — remove if unwanted)
+            let notice = response + "\n\n_(DeepSeek দ্বারা উত্তর দেওয়া হয়েছে 🤖)_"
+            messages.append(ChatMessage(role: .assistant, content: notice, provider: .deepSeek))
+        } catch {
+            appendError(error, provider: .deepSeek)
+        }
+    }
+
+    // MARK: - Error helper
+
+    private func appendError(_ error: Error, provider: AIProvider) {
+        let providerName = provider == .deepSeek ? "DeepSeek" : "Gemini"
+        let text: String
+
+        if let chatError = error as? ChatError {
+            switch chatError {
+            case .httpError(let code, let msg):
+                text = "⚠️ \(providerName) Error \(code): \(msg)"
+            case .noResponse:
+                text = "⚠️ দুঃখিত, কোনো উত্তর পাওয়া যায়নি। আবার চেষ্টা করুন।"
+            case .networkError(let e):
+                text = "⚠️ নেটওয়ার্ক সমস্যা: \(e.localizedDescription)"
+            case .invalidURL:
+                text = "⚠️ Invalid URL configuration."
+            case .quotaExhausted:
+                text = "⚠️ সকল AI সার্ভারের কোটা শেষ। কিছুক্ষণ পরে আবার চেষ্টা করুন। 🙏"
+            }
+        } else {
+            text = "⚠️ অজানা সমস্যা: \(error.localizedDescription)"
+        }
+
+        messages.append(ChatMessage(role: .assistant, content: text, provider: .none))
     }
 }
