@@ -3,6 +3,7 @@ import SwiftUI
 // MARK: - WeatherFeatureView
 struct WeatherFeatureView: View {
     @StateObject private var vm = WeatherFeatureViewModel()
+    var onBack: (() -> Void)?
 
     private let brandGreen = Color(red: 0.18, green: 0.55, blue: 0.34)
     @State private var isLegendPresented = false
@@ -74,12 +75,14 @@ struct WeatherFeatureView: View {
     // MARK: - Header Bar
     private var headerBar: some View {
         HStack(spacing: 10) {
-            Button(action: {}) {
-                Image(systemName: "line.3.horizontal")
+            Button(action: { onBack?() }) {
+                Image(systemName: "chevron.left")
                     .font(.system(size: 20, weight: .semibold))
                     .foregroundStyle(.white)
+                    .frame(width: 36, height: 36)
+                    .background(Circle().fill(.white.opacity(0.18)))
             }
-            .accessibilityLabel("Menu")
+            .accessibilityLabel("Back")
 
             VStack(alignment: .leading, spacing: 1) {
                 Text("আবহাওয়া · Weather")
@@ -91,15 +94,6 @@ struct WeatherFeatureView: View {
             }
 
             Spacer()
-
-            Button(action: {}) {
-                Image(systemName: "magnifyingglass")
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .frame(width: 36, height: 36)
-                    .background(Circle().fill(.white.opacity(0.18)))
-            }
-            .accessibilityLabel("Search")
 
             Button(action: { vm.refresh() }) {
                 Image(systemName: "arrow.clockwise")

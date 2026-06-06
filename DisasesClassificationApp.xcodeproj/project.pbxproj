@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7964F91532816EA9DA5A4C13 /* DrawerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FCAC451489A0BE5224CCECC /* DrawerViewModel.swift */; };
 		88FA14FB95B5E0FF38BFFCB9 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 97692E411ABAF3CFEBA9313D /* FirebaseFirestore */; };
+		A7F648C3A9CE9D6F46E16B55 /* CloudinaryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15DD4144A0AA09B408ADFFE0 /* CloudinaryService.swift */; };
 		DD1C74922FD2D033008CA008 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1C74902FD2D033008CA008 /* UserModel.swift */; };
 		DD1C749A2FD2EF7F008CA008 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1C74992FD2EF7F008CA008 /* ChatViewModel.swift */; };
 		DD1C749C2FD2EFB6008CA008 /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1C749B2FD2EFB6008CA008 /* FirestoreManager.swift */; };
@@ -64,16 +65,25 @@
 		DDB045D22FA9BF56002EA282 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DDB045D12FA9BF56002EA282 /* GoogleSignInSwift */; };
 		DDB045D42FA9C13E002EA282 /* GoogleSignInManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB045D32FA9C13E002EA282 /* GoogleSignInManager.swift */; };
 		DDBAF90B2FD3DEE200460D18 /* DeepSeekService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBAF90A2FD3DEE200460D18 /* DeepSeekService.swift */; };
+		DDBAF9152FD408CE00460D18 /* CommunityModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBAF9142FD408CE00460D18 /* CommunityModels.swift */; };
+		DDBAF9172FD408DB00460D18 /* CommunityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBAF9162FD408DB00460D18 /* CommunityService.swift */; };
+		DDBAF9192FD408E700460D18 /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBAF9182FD408E700460D18 /* CommunityView.swift */; };
+		DDBAF91B2FD408F100460D18 /* CreatePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBAF91A2FD408F100460D18 /* CreatePostView.swift */; };
+		DDBAF91D2FD408FA00460D18 /* CreatePostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBAF91C2FD408FA00460D18 /* CreatePostViewModel.swift */; };
+		DDBAF91F2FD4091700460D18 /* ImageUploadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBAF91E2FD4091700460D18 /* ImageUploadService.swift */; };
+		DDBAF9212FD4092300460D18 /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBAF9202FD4092300460D18 /* PostDetailView.swift */; };
+		DDBAF9232FD4093900460D18 /* CommunityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBAF9222FD4093900460D18 /* CommunityViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		15DD4144A0AA09B408ADFFE0 /* CloudinaryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CloudinaryService.swift; path = DisasesClassificationApp/Community/Manager/CloudinaryService.swift; sourceTree = SOURCE_ROOT; };
 		6FCAC451489A0BE5224CCECC /* DrawerViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DrawerViewModel.swift; sourceTree = "<group>"; };
 		DD1C74902FD2D033008CA008 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		DD1C74992FD2EF7F008CA008 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 		DD1C749B2FD2EFB6008CA008 /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
 		DD1C749D2FD2EFE3008CA008 /* ChatModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatModels.swift; sourceTree = "<group>"; };
 		DD1C749F2FD2EFF1008CA008 /* GeminiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiService.swift; sourceTree = "<group>"; };
-		DD1C74A2FD313700000002 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		'DD1C74A2FD313700000002' = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		DD2885EB2FA98F2500176DC7 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		DD2885ED2FA98F6C00176DC7 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		DD28860C2FA9A04D00176DC7 /* FirebaseAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthManager.swift; sourceTree = "<group>"; };
@@ -111,6 +121,14 @@
 		DDB045CC2FA9B66F002EA282 /* Info/GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DDB045D32FA9C13E002EA282 /* GoogleSignInManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInManager.swift; sourceTree = "<group>"; };
 		DDBAF90A2FD3DEE200460D18 /* DeepSeekService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepSeekService.swift; sourceTree = "<group>"; };
+		DDBAF9142FD408CE00460D18 /* CommunityModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityModels.swift; sourceTree = "<group>"; };
+		DDBAF9162FD408DB00460D18 /* CommunityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityService.swift; sourceTree = "<group>"; };
+		DDBAF9182FD408E700460D18 /* CommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityView.swift; sourceTree = "<group>"; };
+		DDBAF91A2FD408F100460D18 /* CreatePostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostView.swift; sourceTree = "<group>"; };
+		DDBAF91C2FD408FA00460D18 /* CreatePostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostViewModel.swift; sourceTree = "<group>"; };
+		DDBAF91E2FD4091700460D18 /* ImageUploadService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploadService.swift; sourceTree = "<group>"; };
+		DDBAF9202FD4092300460D18 /* PostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailView.swift; sourceTree = "<group>"; };
+		DDBAF9222FD4093900460D18 /* CommunityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +197,7 @@
 				DD8E72362FA8D5050005D254 /* DisasesClassificationApp */,
 				DD8E721E2FA8D42C0005D254 /* Products */,
 				DDBAF9092FD3C8D500460D18 /* Recovered References */,
+				15DD4144A0AA09B408ADFFE0 /* CloudinaryService.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -193,6 +212,7 @@
 		DD8E72362FA8D5050005D254 /* DisasesClassificationApp */ = {
 			isa = PBXGroup;
 			children = (
+				DDBAF9122FD408A400460D18 /* Community */,
 				DDA658CD2F000020003137CE /* Weather */,
 				DDA658CE2F000021003137CE /* Chat */,
 				DDB045DB2FAA0517002EA282 /* Home */,
@@ -401,9 +421,56 @@
 		DDBAF9092FD3C8D500460D18 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				DD1C74A2FD313700000002 /* Config.xcconfig */,
+				DD1C74A2FD313700000002,
 			);
 			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		DDBAF90D2FD408A400460D18 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				DDBAF91E2FD4091700460D18 /* ImageUploadService.swift */,
+				DDBAF9162FD408DB00460D18 /* CommunityService.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		DDBAF90E2FD408A400460D18 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				DDBAF9142FD408CE00460D18 /* CommunityModels.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		DDBAF90F2FD408A400460D18 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DDBAF9202FD4092300460D18 /* PostDetailView.swift */,
+				DDBAF91A2FD408F100460D18 /* CreatePostView.swift */,
+				DDBAF9182FD408E700460D18 /* CommunityView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DDBAF9112FD408A400460D18 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				DDBAF9222FD4093900460D18 /* CommunityViewModel.swift */,
+				DDBAF91C2FD408FA00460D18 /* CreatePostViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		DDBAF9122FD408A400460D18 /* Community */ = {
+			isa = PBXGroup;
+			children = (
+				DDBAF90D2FD408A400460D18 /* Manager */,
+				DDBAF90E2FD408A400460D18 /* Model */,
+				DDBAF90F2FD408A400460D18 /* View */,
+				DDBAF9112FD408A400460D18 /* ViewModel */,
+			);
+			path = Community;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -423,6 +490,7 @@
 			);
 			name = DisasesClassificationApp;
 			packageProductDependencies = (
+				297DD4EAC79F869FF9B8F0C3 /* Cloudinary */,
 				DD2885F02FA99AC500176DC7 /* FirebaseAI */,
 				DD2885F22FA99AC500176DC7 /* FirebaseAILogic */,
 				DD2885F42FA99AC500176DC7 /* FirebaseAnalytics */,
@@ -469,6 +537,7 @@
 			mainGroup = DD8E72142FA8D42C0005D254;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				44B018EBA672B3F1EA0A2B52 /* XCRemoteSwiftPackageReference "cloudinary_ios" */,
 				DD2885EF2FA99AC500176DC7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				DDB045CE2FA9BF56002EA282 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
@@ -500,6 +569,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDBAF91B2FD408F100460D18 /* CreatePostView.swift in Sources */,
 				DDA658C22F000010003137CE /* ChatHomeView.swift in Sources */,
 				DDA658C42F000011003137CE /* WeatherFeatureView.swift in Sources */,
 				DDA658C62F000012003137CE /* WeatherFeatureViewModel.swift in Sources */,
@@ -511,11 +581,16 @@
 				DD8E72402FA8D5A10005D254 /* Page.swift in Sources */,
 				DD8E72442FA8DABE0005D254 /* CoordinatorView.swift in Sources */,
 				DD2885EE2FA98F6C00176DC7 /* LoginViewModel.swift in Sources */,
+				DDBAF9232FD4093900460D18 /* CommunityViewModel.swift in Sources */,
+				DDBAF9172FD408DB00460D18 /* CommunityService.swift in Sources */,
 				DD92F8E72FAB8FBE005EC045 /* HomeViewModel.swift in Sources */,
+				DDBAF9192FD408E700460D18 /* CommunityView.swift in Sources */,
 				DD8E724A2FA8ED660005D254 /* CreateAccountViewModel.swift in Sources */,
 				DD92F8EB2FAB907A005EC045 /* MainTabView.swift in Sources */,
+				DDBAF91D2FD408FA00460D18 /* CreatePostViewModel.swift in Sources */,
 				DD1C749C2FD2EFB6008CA008 /* FirestoreManager.swift in Sources */,
 				DDB045D42FA9C13E002EA282 /* GoogleSignInManager.swift in Sources */,
+				DDBAF9152FD408CE00460D18 /* CommunityModels.swift in Sources */,
 				DD8E724F2FA8F3C70005D254 /* AuthManager.swift in Sources */,
 				DD92F8DC2FAB820B005EC045 /* WeatherDisplayModel.swift in Sources */,
 				DD8E72482FA8ED330005D254 /* CreateAccountView.swift in Sources */,
@@ -527,9 +602,11 @@
 				DD1C74922FD2D033008CA008 /* UserModel.swift in Sources */,
 				DD8E72382FA8D5050005D254 /* HomeView.swift in Sources */,
 				DD92F8DE2FAB8252005EC045 /* FeatureModel.swift in Sources */,
+				DDBAF91F2FD4091700460D18 /* ImageUploadService.swift in Sources */,
 				DD8E72392FA8D5050005D254 /* DiseasesClassificationAppApp.swift in Sources */,
 				DD92F8DA2FAB6ACB005EC045 /* WeatherModel.swift in Sources */,
 				DD92F8E52FAB8F60005EC045 /* WeatherViewModel.swift in Sources */,
+				DDBAF9212FD4092300460D18 /* PostDetailView.swift in Sources */,
 				DD1C74A02FD2EFF1008CA008 /* GeminiService.swift in Sources */,
 				DD8E723C2FA8D5280005D254 /* Coordinator.swift in Sources */,
 				DD8A31E72FBDFE4E0047776D /* MenuItem.swift in Sources */,
@@ -538,6 +615,7 @@
 				DD8E724D2FA8F0220005D254 /* MangoTextField.swift in Sources */,
 				7964F91532816EA9DA5A4C13 /* DrawerViewModel.swift in Sources */,
 				DDBAF90B2FD3DEE200460D18 /* DeepSeekService.swift in Sources */,
+				A7F648C3A9CE9D6F46E16B55 /* CloudinaryService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -665,7 +743,7 @@
 		};
 		DD8E72292FA8D42F0005D254 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DD1C74A2FD313700000002 /* Config.xcconfig */;
+			baseConfigurationReference = DD1C74A2FD313700000002;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -700,7 +778,7 @@
 		};
 		DD8E722A2FA8D42F0005D254 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DD1C74A2FD313700000002 /* Config.xcconfig */;
+			baseConfigurationReference = DD1C74A2FD313700000002;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -757,6 +835,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		44B018EBA672B3F1EA0A2B52 /* XCRemoteSwiftPackageReference "cloudinary_ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/cloudinary/cloudinary_ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 		DD2885EF2FA99AC500176DC7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -776,6 +862,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		297DD4EAC79F869FF9B8F0C3 /* Cloudinary */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 44B018EBA672B3F1EA0A2B52 /* XCRemoteSwiftPackageReference "cloudinary_ios" */;
+			productName = Cloudinary;
+		};
 		97692E411ABAF3CFEBA9313D /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = DD2885EF2FA99AC500176DC7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

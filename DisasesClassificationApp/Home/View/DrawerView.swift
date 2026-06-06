@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DrawerView: View {
     @StateObject private var viewModel = DrawerViewModel()
+    var onNavigate: ((DrawerDestination) -> Void)?
     
     // Brand colors based on the screenshot
     private let brandGreen = Color(red: 0.35, green: 0.69, blue: 0.46) // Approximate green from image header
@@ -101,7 +102,7 @@ struct DrawerView: View {
     // MARK: - Menu Item View
     private func menuItemRow(item: DrawerMenuItem) -> some View {
         Button(action: {
-            // Coordinator navigation action could go here
+            onNavigate?(item.destination)
         }) {
             HStack(spacing: 20) {
                 Image(systemName: item.icon)

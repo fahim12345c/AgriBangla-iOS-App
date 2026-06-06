@@ -16,23 +16,26 @@ enum AppTab: Int, CaseIterable {
     case home
     case weather
     case chat
+    case community
     case diseases
 
     var title: String {
         switch self {
-        case .home:     return "Home"
-        case .weather:  return "Weather"
-        case .chat:     return "Chat"
-        case .diseases: return "Diseases"
+        case .home:      return "Home"
+        case .weather:   return "Weather"
+        case .chat:      return "Chat"
+        case .community: return "Community"
+        case .diseases:  return "Diseases"
         }
     }
 
     var icon: String {
         switch self {
-        case .home:     return "house.fill"
-        case .weather:  return "cloud.sun.fill"
-        case .chat:     return "message.fill"
-        case .diseases: return "camera.fill"
+        case .home:      return "house.fill"
+        case .weather:   return "cloud.sun.fill"
+        case .chat:      return "message.fill"
+        case .community: return "person.3.fill"
+        case .diseases:  return "camera.fill"
         }
     }
 }
@@ -44,9 +47,7 @@ struct MainTabView: View {
     // Pass from your coordinator / auth flow
     var userName: String = "Farmer"
 
-    // Coordinator callbacks
     var onDiseaseScannerTap: (() -> Void)? = nil
-    var onCommunityTap: (() -> Void)? = nil
     
     private let brandGreen = Color(red: 0.18, green: 0.55, blue: 0.34)
 
@@ -55,17 +56,21 @@ struct MainTabView: View {
             HomeView(
                 userName: userName,
                 onDiseaseScannerTap: { selectedTab = .diseases },
-                onCommunityTap: onCommunityTap,
+                onCommunityTap: { selectedTab = .community },
                 onWeatherTap: { selectedTab = .weather },
+                onChatTap: { selectedTab = .chat },
                 onProfileTap: nil
             )
             .tag(AppTab.home)
 
-            WeatherFeatureView()
+            WeatherFeatureView(onBack: { selectedTab = .home })
                 .tag(AppTab.weather)
 
             ChatHomeView()
                 .tag(AppTab.chat)
+
+            CommunityView()
+                .tag(AppTab.community)
 
             DiseasesScannerView()
                 .tag(AppTab.diseases)

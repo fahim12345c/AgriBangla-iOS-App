@@ -15,6 +15,7 @@ struct HomeView: View {
     var onSmartRecommendationsTap: (() -> Void)? = nil
     var onCommunityTap: (() -> Void)? = nil
     var onWeatherTap: (() -> Void)? = nil
+    var onChatTap: (() -> Void)? = nil
     var onProfileTap: (() -> Void)? = nil
     var onSearchTap: (() -> Void)? = nil
     var onNotificationTap: (() -> Void)? = nil
@@ -72,7 +73,17 @@ struct HomeView: View {
                 // Drawer
                 HStack {
                     
-                    DrawerView()
+                    DrawerView(onNavigate: { destination in
+                        closeMenu()
+                        switch destination {
+                        case .chat: onChatTap?()
+                        case .weather: onWeatherTap?()
+                        case .diseaseScanner: onDiseaseScannerTap?()
+                        case .community: onCommunityTap?()
+                        case .profile: onProfileTap?()
+                        default: break
+                        }
+                    })
                         .frame(width: UIScreen.main.bounds.width * 0.75)
                         .background(Color.white)
                         .offset(x: showMenu ? 0 : -UIScreen.main.bounds.width * 0.25)
