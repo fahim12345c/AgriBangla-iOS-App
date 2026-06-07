@@ -61,6 +61,20 @@ final class CommunityViewModel: ObservableObject {
         isLoading = false
     }
 
+    func deletePost(postId: String) {
+        isLoading = true
+        errorMessage = nil
+        Task {
+            do {
+                try await communityService.deletePost(postId: postId)
+                posts = try await communityService.fetchPosts()
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+            isLoading = false
+        }
+    }
+
     var currentUserId: String? {
         Auth.auth().currentUser?.uid
     }

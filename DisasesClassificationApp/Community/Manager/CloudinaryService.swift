@@ -9,9 +9,13 @@ final class CloudinaryService {
     private init() {}
 
     func uploadImage(_ image: UIImage) async throws -> String {
+        print("[Cloudinary] Starting upload to cloud: \(cloudName), preset: \(uploadPreset)")
+
         guard let compressedData = compressImage(image) else {
+            print("[Cloudinary] Compression failed")
             throw CloudinaryError.compressionFailed
         }
+        print("[Cloudinary] Image compressed: \(compressedData.count) bytes")
 
         let url = URL(string: "https://api.cloudinary.com/v1_1/\(cloudName)/image/upload")!
         var request = URLRequest(url: url)
@@ -19,6 +23,7 @@ final class CloudinaryService {
 
         let boundary = UUID().uuidString
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        request.timeoutInterval = 30
 
         var body = Data()
         body.append("--\(boundary)\r\n".data(using: .utf8)!)
@@ -31,21 +36,44 @@ final class CloudinaryService {
         body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
         request.httpBody = body
 
+        print("[Cloudinary] Sending POST request to: \(url.absoluteString)")
         let (data, response) = try await URLSession.shared.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse else {
-            throw CloudinaryError.uploadFailed
+            print("[Cloudinary] No HTTP response")
+            throw CloudinaryError.uploadFailed("No HTTP response from Cloudinary")
         }
+        print("[Cloudinary] HTTP response status: \(httpResponse.statusCode)")
+
+        guard (200...299).contains(httpResponse.statusCode) else {
+            let responseBody = String(data: data, encoding: .utf8) ?? "no body"
+            print("[Cloudinary] Error response body: \(responseBody)")
+            if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+               let error = json["error"] as? [String: Any],
+               let message = error["message"] as? String {
+                print("[Cloudinary] Cloudinary error message: \(message)")
+                throw CloudinaryError.uploadFailed(message)
+            }
+            throw CloudinaryError.uploadFailed(
+                "Cloudinary returned HTTP \(httpResponse.statusCode). " +
+                "Check that upload preset '\(uploadPreset)' exists and is unsigned " +
+                "(Cloudinary Console → Settings → Upload). Response: \(responseBody)"
+            )
+        }
+
+        let responseBody = String(data: data, encoding: .utf8) ?? ""
+        print("[Cloudinary] Success response: \(responseBody.prefix(200))")
+
         guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-            throw CloudinaryError.uploadFailed
+            print("[Cloudinary] Invalid JSON in response")
+            throw CloudinaryError.uploadFailed("Invalid JSON response from Cloudinary")
         }
-        if let error = json["error"] as? [String: Any],
-           let message = error["message"] as? String {
-            throw NSError(domain: "Cloudinary", code: httpResponse.statusCode,
-                         userInfo: [NSLocalizedDescriptionKey: message])
-        }
+
         guard let secureURL = json["secure_url"] as? String else {
-            throw CloudinaryError.uploadFailed
+            print("[Cloudinary] Missing secure_url in response")
+            throw CloudinaryError.uploadFailed("No image URL in Cloudinary response")
         }
+
+        print("[Cloudinary] Upload success, URL: \(secureURL)")
         return secureURL
     }
 
@@ -67,12 +95,14 @@ final class CloudinaryService {
 
 enum CloudinaryError: LocalizedError {
     case compressionFailed
-    case uploadFailed
+    case uploadFailed(String)
 
     var errorDescription: String? {
         switch self {
-        case .compressionFailed: return "Image compression failed"
-        case .uploadFailed: return "Image upload failed"
+        case .compressionFailed:
+            return "Failed to process image. Try a smaller or different photo."
+        case .uploadFailed(let detail):
+            return detail
         }
     }
 }

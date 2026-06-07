@@ -51,7 +51,15 @@ final class GoogleSignInManager {
         let authResult = try await Auth.auth().signIn(with: credential)
         
         // 7. Save to Firestore
-        try await FirestoreManager.shared.createUserDocument(user: authResult.user)
+        let displayName = authResult.user.displayName ?? ""
+        let nameParts = displayName.split(separator: " ", maxSplits: 1)
+        let firstName = nameParts.first.map(String.init) ?? ""
+        let lastName = nameParts.dropFirst().first.map(String.init) ?? ""
+        try await FirestoreManager.shared.createUserDocument(
+            user: authResult.user,
+            firstName: firstName,
+            lastName: lastName
+        )
         
         return authResult.user
     }

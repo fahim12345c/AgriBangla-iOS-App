@@ -1,16 +1,21 @@
 import SwiftUI
 import FirebaseFirestore
+import FirebaseAuth
 
 struct PostDetailView: View {
     let post: CommunityPost
+    var onDelete: (() -> Void)?
     @StateObject private var viewModel: PostDetailViewModel
     @State private var commentText = ""
+    @State private var showDeleteConfirm = false
+    @Environment(\.dismiss) private var dismiss
 
     private let brandGreen = Color(red: 0.18, green: 0.55, blue: 0.34)
     private let bgColor = Color(red: 0.95, green: 0.97, blue: 0.95)
 
-    init(post: CommunityPost) {
+    init(post: CommunityPost, onDelete: (() -> Void)? = nil) {
         self.post = post
+        self.onDelete = onDelete
         _viewModel = StateObject(wrappedValue: PostDetailViewModel(post: post))
     }
 
@@ -30,6 +35,25 @@ struct PostDetailView: View {
         }
         .navigationTitle("Post")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if post.userId == Auth.auth().currentUser?.uid {
+                ToolbarItem(placement: .destructiveAction) {
+                    Button(action: { showDeleteConfirm = true }) {
+                        Image(systemName: "trash")
+                            .foregroundColor(.red)
+                    }
+                }
+            }
+        }
+        .confirmationDialog("Delete Post?", isPresented: $showDeleteConfirm) {
+            Button("Delete", role: .destructive) {
+                onDelete?()
+                dismiss()
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("This will permanently delete your post and all its comments.")
+        }
         .onAppear { viewModel.loadData() }
     }
 

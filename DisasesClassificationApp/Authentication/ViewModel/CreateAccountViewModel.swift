@@ -46,6 +46,8 @@ final class CreateAccountViewModel: ObservableObject, Identifiable {
     let id: UUID = UUID()
 
     // MARK: - Published Input Fields
+    @Published var firstName: String = ""
+    @Published var lastName: String = ""
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var confirmPassword: String = ""
@@ -56,6 +58,8 @@ final class CreateAccountViewModel: ObservableObject, Identifiable {
     @Published var authState: AuthState = .idle
 
     // MARK: - Field-level Error Messages
+    @Published var firstNameError: String? = nil
+    @Published var lastNameError: String? = nil
     @Published var emailError: String? = nil
     @Published var passwordError: String? = nil
     @Published var confirmPasswordError: String? = nil
@@ -69,6 +73,8 @@ final class CreateAccountViewModel: ObservableObject, Identifiable {
 
     // MARK: - Computed: Is form valid
     var isFormValid: Bool {
+        !firstName.trimmingCharacters(in: .whitespaces).isEmpty &&
+        !lastName.trimmingCharacters(in: .whitespaces).isEmpty &&
         !email.trimmingCharacters(in: .whitespaces).isEmpty &&
         !password.isEmpty &&
         !confirmPassword.isEmpty
@@ -88,6 +94,14 @@ final class CreateAccountViewModel: ObservableObject, Identifiable {
     }
 
     // MARK: - Real-time Field Validation
+    func validateFirstName() {
+        firstNameError = firstName.trimmingCharacters(in: .whitespaces).isEmpty ? "First name is required." : nil
+    }
+
+    func validateLastName() {
+        lastNameError = lastName.trimmingCharacters(in: .whitespaces).isEmpty ? "Last name is required." : nil
+    }
+
     func validateEmail() {
         Task { @MainActor in
             await Task.yield()
@@ -141,6 +155,9 @@ final class CreateAccountViewModel: ObservableObject, Identifiable {
     private func validate() async -> Bool {
         await Task.yield()
 
+        firstNameError = firstName.trimmingCharacters(in: .whitespaces).isEmpty ? "First name is required." : nil
+        lastNameError = lastName.trimmingCharacters(in: .whitespaces).isEmpty ? "Last name is required." : nil
+
         emailError = nil
         let trimmed = email.trimmingCharacters(in: .whitespaces)
         if trimmed.isEmpty {
@@ -163,7 +180,7 @@ final class CreateAccountViewModel: ObservableObject, Identifiable {
             confirmPasswordError = ValidationError.passwordMismatch.errorDescription
         }
 
-        return emailError == nil && passwordError == nil && confirmPasswordError == nil
+        return firstNameError == nil && lastNameError == nil && emailError == nil && passwordError == nil && confirmPasswordError == nil
     }
 
     private func isValidEmail(_ email: String) -> Bool {
@@ -204,10 +221,20 @@ final class CreateAccountViewModel: ObservableObject, Identifiable {
                 password: password
             )
             print("✅ User created:", result.user.uid)
-            
+
+            // Set displayName on Firebase Auth user
+            let displayName = "\(firstName.trimmingCharacters(in: .whitespaces)) \(lastName.trimmingCharacters(in: .whitespaces))"
+            let changeRequest = result.user.createProfileChangeRequest()
+            changeRequest.displayName = displayName
+            try await changeRequest.commitChanges()
+
             // Save to Firestore
-            try await FirestoreManager.shared.createUserDocument(user: result.user)
-            
+            try await FirestoreManager.shared.createUserDocument(
+                user: result.user,
+                firstName: firstName.trimmingCharacters(in: .whitespaces),
+                lastName: lastName.trimmingCharacters(in: .whitespaces)
+            )
+
             authState = .success
         } catch let error as NSError {
             authState = .failure(firebaseErrorMessage(error))

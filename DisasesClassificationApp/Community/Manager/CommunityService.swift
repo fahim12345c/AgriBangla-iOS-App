@@ -35,7 +35,7 @@ final class CommunityService {
 
     func createPost(text: String, imageURL: String?) async throws {
         guard let userId = Auth.auth().currentUser?.uid else { return }
-        let userName = Auth.auth().currentUser?.displayName ?? "Farmer"
+        let userName = Auth.auth().currentUser?.displayName ?? "Unknown User"
         let data: [String: Any] = [
             "userId": userId,
             "userName": userName,
@@ -52,6 +52,23 @@ final class CommunityService {
         try await db.collection(postsCollection).document(postId).updateData([
             "text": text
         ])
+    }
+
+    func deletePost(postId: String) async throws {
+        guard Auth.auth().currentUser?.uid != nil else { return }
+        let postRef = db.collection(postsCollection).document(postId)
+
+        let comments = try await postRef.collection("comments").getDocuments()
+        for doc in comments.documents {
+            try await doc.reference.delete()
+        }
+
+        let reactions = try await postRef.collection("reactions").getDocuments()
+        for doc in reactions.documents {
+            try await doc.reference.delete()
+        }
+
+        try await postRef.delete()
     }
 
     // MARK: - Comments
@@ -80,7 +97,7 @@ final class CommunityService {
 
     func addComment(to postId: String, text: String) async throws {
         guard let userId = Auth.auth().currentUser?.uid else { return }
-        let userName = Auth.auth().currentUser?.displayName ?? "Farmer"
+        let userName = Auth.auth().currentUser?.displayName ?? "Unknown User"
         let data: [String: Any] = [
             "postId": postId,
             "userId": userId,

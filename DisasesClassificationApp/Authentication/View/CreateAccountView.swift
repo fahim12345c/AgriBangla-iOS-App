@@ -124,6 +124,28 @@ struct CreateAccountView: View {
    private var formSection: some View {
        VStack(spacing: 16) {
 
+           // First Name
+           MangoTextField(
+               placeholder: "First Name",
+               systemImage: "person",
+               text: $viewModel.firstName,
+               errorMessage: viewModel.firstNameError,
+               onEditingChanged: { focused in
+                   if !focused { viewModel.validateFirstName() }
+               }
+           )
+
+           // Last Name
+           MangoTextField(
+               placeholder: "Last Name",
+               systemImage: "person",
+               text: $viewModel.lastName,
+               errorMessage: viewModel.lastNameError,
+               onEditingChanged: { focused in
+                   if !focused { viewModel.validateLastName() }
+               }
+           )
+
            // Email
            MangoTextField(
                placeholder: "Email Address",

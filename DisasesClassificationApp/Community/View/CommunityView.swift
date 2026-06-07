@@ -143,13 +143,18 @@ struct CommunityView: View {
         ScrollView {
             LazyVStack(spacing: 14) {
                 ForEach(viewModel.posts) { post in
-                    NavigationLink(destination: PostDetailView(post: post)) {
+                    NavigationLink(destination: PostDetailView(post: post, onDelete: {
+                        viewModel.deletePost(postId: post.id)
+                    })) {
                         PostCardView(
                             post: post,
                             isOwner: post.userId == viewModel.currentUserId,
                             onEdit: {
                                 editText = post.text
                                 editingPost = post
+                            },
+                            onDelete: {
+                                viewModel.deletePost(postId: post.id)
                             }
                         )
                     }
@@ -166,6 +171,9 @@ struct PostCardView: View {
     let post: CommunityPost
     var isOwner: Bool = false
     var onEdit: (() -> Void)?
+    var onDelete: (() -> Void)?
+
+    @State private var showDeleteConfirm = false
 
     private let brandGreen = Color(red: 0.18, green: 0.55, blue: 0.34)
 
@@ -185,13 +193,27 @@ struct PostCardView: View {
                 }
                 Spacer()
                 if isOwner {
-                    Button(action: { onEdit?() }) {
-                        Image(systemName: "pencil.circle.fill")
-                            .font(.system(size: 22))
-                            .foregroundColor(brandGreen.opacity(0.7))
+                    HStack(spacing: 4) {
+                        Button(action: { onEdit?() }) {
+                            Image(systemName: "pencil.circle.fill")
+                                .font(.system(size: 22))
+                                .foregroundColor(brandGreen.opacity(0.7))
+                        }
+                        .buttonStyle(.plain)
+                        Button(action: { showDeleteConfirm = true }) {
+                            Image(systemName: "trash.circle.fill")
+                                .font(.system(size: 22))
+                                .foregroundColor(.red.opacity(0.7))
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
                 }
+            }
+            .confirmationDialog("Delete Post?", isPresented: $showDeleteConfirm) {
+                Button("Delete", role: .destructive) { onDelete?() }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("This will permanently delete your post.")
             }
 
             Text(post.text)

@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 // MARK: - HomeView
 struct HomeView: View {
@@ -25,6 +26,9 @@ struct HomeView: View {
     @State private var cardsVisible = false
     @State private var showMenu = false
     let menuWidth: CGFloat = 280
+    @State private var showPhotoPicker = false
+    @State private var showUploadError = false
+    @State private var photoItem: PhotosPickerItem?
 
     // Brand green — defined inline so no asset needed
     private let brandGreen = Color(red: 0.18, green: 0.55, blue: 0.34)
@@ -94,6 +98,40 @@ struct HomeView: View {
                 .ignoresSafeArea()
             }
 
+        }
+        .photosPicker(isPresented: $showPhotoPicker, selection: $photoItem, matching: .images)
+        .task(id: photoItem) {
+            guard let item = photoItem else { return }
+            print("[HomeView] task fired with photoItem: \(item)")
+            viewModel.isUploadingProfileImage = true
+            do {
+                print("[HomeView] Loading transferable data...")
+                if let data = try await item.loadTransferable(type: Data.self) {
+                    print("[HomeView] Loaded \(data.count) bytes from PhotosPicker")
+                    viewModel.uploadProfileImageData(data)
+                } else {
+                    print("[HomeView] loadTransferable returned nil")
+                    viewModel.profileUploadError = "The selected image couldn't be read. Try a different photo."
+                    viewModel.isUploadingProfileImage = false
+                }
+            } catch {
+                print("[HomeView] loadTransferable error: \(error.localizedDescription)")
+                viewModel.profileUploadError = "Could not load photo: \(error.localizedDescription)"
+                viewModel.isUploadingProfileImage = false
+                photoItem = nil
+            }
+        }
+        .onChange(of: viewModel.profileUploadError) { _ in
+            if viewModel.profileUploadError != nil {
+                showUploadError = true
+            }
+        }
+        .alert("Upload Failed", isPresented: $showUploadError) {
+            Button("OK", role: .cancel) {
+                viewModel.profileUploadError = nil
+            }
+        } message: {
+            Text(viewModel.profileUploadError ?? "Could not upload image. Make sure the Cloudinary upload preset is configured.")
         }
         .onAppear {
             viewModel.onAppear(userName: userName)
@@ -183,12 +221,16 @@ struct HomeView: View {
                 Text("Welcome 👋")
                     .font(.system(size: 13, weight: .medium))
                     .foregroundColor(.gray)
-                Text(viewModel.userName)
+                Text(viewModel.userName.isEmpty ? "User" : viewModel.userName)
                     .font(.system(size: 18, weight: .bold, design: .rounded))
                     .foregroundColor(.primary)
             }
             Spacer()
-            Button(action: { onProfileTap?() }) {
+            Button(action: {
+                print("[HomeView] Profile icon tapped, opening photo picker")
+                photoItem = nil
+                showPhotoPicker = true
+            }) {
                 ZStack {
                     Circle()
                         .fill(brandGreen.opacity(0.12))
@@ -196,9 +238,43 @@ struct HomeView: View {
                     Circle()
                         .strokeBorder(brandGreen.opacity(0.5), lineWidth: 1.5)
                         .frame(width: 44, height: 44)
-                    Image(systemName: "person.fill")
-                        .font(.system(size: 20))
-                        .foregroundColor(brandGreen)
+                    if let url = viewModel.profileImageURL, let imageURL = URL(string: url) {
+                        AsyncImage(url: imageURL) { phase in
+                            switch phase {
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 44, height: 44)
+                                    .clipShape(Circle())
+                            case .failure:
+                                Image(systemName: "person.fill")
+                                    .font(.system(size: 20))
+                                    .foregroundColor(brandGreen)
+                            case .empty:
+                                ProgressView()
+                                    .scaleEffect(0.7)
+                            @unknown default:
+                                Image(systemName: "person.fill")
+                                    .font(.system(size: 20))
+                                    .foregroundColor(brandGreen)
+                            }
+                        }
+                    } else {
+                        Image(systemName: "person.fill")
+                            .font(.system(size: 20))
+                            .foregroundColor(brandGreen)
+                    }
+                    if viewModel.isUploadingProfileImage {
+                        Circle()
+                            .fill(Color.black.opacity(0.3))
+                            .frame(width: 44, height: 44)
+                            .overlay(
+                                ProgressView()
+                                    .tint(.white)
+                                    .scaleEffect(0.7)
+                            )
+                    }
                 }
             }
         }
