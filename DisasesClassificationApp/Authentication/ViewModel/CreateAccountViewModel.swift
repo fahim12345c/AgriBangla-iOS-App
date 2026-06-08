@@ -222,10 +222,8 @@ final class CreateAccountViewModel: ObservableObject, Identifiable {
             )
             print("✅ User created:", result.user.uid)
 
-            // Set displayName on Firebase Auth user
-            let displayName = "\(firstName.trimmingCharacters(in: .whitespaces)) \(lastName.trimmingCharacters(in: .whitespaces))"
             let changeRequest = result.user.createProfileChangeRequest()
-            changeRequest.displayName = displayName
+            changeRequest.displayName = firstName.trimmingCharacters(in: .whitespaces)
             try await changeRequest.commitChanges()
 
             // Save to Firestore

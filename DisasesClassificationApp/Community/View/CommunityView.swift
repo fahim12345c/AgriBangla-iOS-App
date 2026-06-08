@@ -89,7 +89,7 @@ struct CommunityView: View {
                     Button("Save") {
                         let text = editText
                         editingPost = nil
-                        Task { await viewModel.updatePost(postId: post.id ?? "", text: text) }
+                        Task { await viewModel.updatePost(postId: post.id, text: text) }
                     }
                     .fontWeight(.semibold)
                     .disabled(editText.trimmingCharacters(in: .whitespaces).isEmpty)

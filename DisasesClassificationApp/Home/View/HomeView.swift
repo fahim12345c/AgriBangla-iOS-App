@@ -329,7 +329,7 @@ struct HomeView: View {
     private func handleCardTap(_ destination: AppDestination) {
         switch destination {
         case .diseaseScanner:       onDiseaseScannerTap?()
-        case .smartRecommendations: onSmartRecommendationsTap?()
+        case .smartRecommendations: onChatTap?()
         case .community:            onCommunityTap?()
         case .weather:              onWeatherTap?()
         case .profile:              onProfileTap?()

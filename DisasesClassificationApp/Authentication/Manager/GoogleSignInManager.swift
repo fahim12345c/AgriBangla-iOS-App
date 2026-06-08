@@ -50,7 +50,12 @@ final class GoogleSignInManager {
         // 6. Sign in to Firebase
         let authResult = try await Auth.auth().signIn(with: credential)
         
-        // 7. Save to Firestore
+        // 7. Override displayName to email so CommunityService shows email for Google users
+        let changeRequest = authResult.user.createProfileChangeRequest()
+        changeRequest.displayName = authResult.user.email
+        try await changeRequest.commitChanges()
+
+        // 8. Save to Firestore
         let displayName = authResult.user.displayName ?? ""
         let nameParts = displayName.split(separator: " ", maxSplits: 1)
         let firstName = nameParts.first.map(String.init) ?? ""

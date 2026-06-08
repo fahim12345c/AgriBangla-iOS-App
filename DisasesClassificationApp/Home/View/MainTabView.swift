@@ -72,7 +72,7 @@ struct MainTabView: View {
             CommunityView()
                 .tag(AppTab.community)
 
-            DiseasesScannerView()
+            DiseaseClassificationView()
                 .tag(AppTab.diseases)
         }
         // Avoid .page style; it can break programmatic selection for custom tab bars.
@@ -129,24 +129,6 @@ struct MainTabView: View {
         }
         .buttonStyle(.plain)
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: selectedTab)
-    }
-}
-
-struct DiseasesScannerView: View {
-    var body: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "camera.viewfinder")
-                .font(.system(size: 64))
-                .foregroundColor(Color(red: 0.18, green: 0.55, blue: 0.34))
-            Text("Disease Scanner")
-                .font(.title2.bold())
-            Text("Integrate your mango leaf classification model here")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 40)
-        }
-        .padding(.top, 30)
     }
 }
 
