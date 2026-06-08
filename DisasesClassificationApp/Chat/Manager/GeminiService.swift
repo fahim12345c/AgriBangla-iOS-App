@@ -41,7 +41,6 @@ final class GeminiService {
     /// Throws `ChatError.quotaExhausted` when ALL models return 429 — caller should try DeepSeek.
     /// Throws `ChatError.httpError(503, _)` when ALL models are overloaded.
     func sendMessage(_ userText: String) async throws -> String {
-        var lastError: Error = ChatError.noResponse
         var allModels429 = true  // track if every failure was quota-related
  
         for model in modelFallbackChain {
@@ -50,12 +49,10 @@ final class GeminiService {
                 return result
             } catch ChatError.httpError(429, _) {
                 // 429 = quota — try next model
-                lastError = ChatError.httpError(429, "কোটা শেষ, পরের মডেল চেষ্টা করছি...")
                 continue
             } catch ChatError.httpError(503, _) {
                 // 503 = overloaded — try next model, but not a quota issue
                 allModels429 = false
-                lastError = ChatError.httpError(503, "সার্ভার ব্যস্ত, পরের মডেল চেষ্টা করছি...")
                 continue
             } catch {
                 // Any other error (404, 400, network) — throw immediately
@@ -81,9 +78,10 @@ final class GeminiService {
             // Wait 2s × attempt, then retry same model
             try await Task.sleep(nanoseconds: UInt64(attempt) * 2_000_000_000)
             return try await sendWithRetry(userText, model: model, attempt: attempt + 1)
+        } catch {
+            // After 2 retries on same model or for non-503 errors, rethrow so caller tries next model
+            throw error
         }
-        // After 2 retries on same model, rethrow so caller tries next model
-        return try await performRequest(userText, model: model)
     }
  
     // MARK: - Private: single request

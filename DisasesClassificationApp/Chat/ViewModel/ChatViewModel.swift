@@ -65,8 +65,7 @@ final class ChatViewModel: ObservableObject {
             let response = try await deepSeekService.sendMessage(text)
             activeProvider = .deepSeek
             // Subtle notice so the user knows a fallback was used (optional — remove if unwanted)
-            let notice = response + "\n\n_(DeepSeek দ্বারা উত্তর দেওয়া হয়েছে 🤖)_"
-            messages.append(ChatMessage(role: .assistant, content: notice, provider: .deepSeek))
+            messages.append(ChatMessage(role: .assistant, content: response, provider: .deepSeek))
         } catch {
             appendError(error, provider: .deepSeek)
         }
