@@ -300,7 +300,7 @@ flowchart TD
     E --> F[User selects Application Type<br>Herbicide / Fungicide / Insecticide]
     F --> G[SprayingCalculator.assess]
     
-    G --> H{Compute Delta T<br>(Stull approximation)}
+    G --> H{Compute Delta T<br>Stull approx}
     H --> I{Assess conditions}
     I -->|Delta T 2-8°C, Wind <15km/h| J[🟢 Optimal Spray Window]
     I -->|Delta T 1-2°C or 8-10°C| K[🟡 Marginal]
@@ -356,7 +356,7 @@ flowchart TD
 flowchart TD
     A[Tap profile icon on Home] --> B[PhotosPicker opens]
     B --> C[User selects photo]
-    C --> D[UIImage loaded via .task(id: photoItem)]
+    C --> D[UIImage loaded via PhotosPicker]
     D --> E[HomeViewModel.uploadProfileImageData]
     E --> F[CloudinaryService.uploadImage<br>→ unsigned preset → secure URL]
     F -->|URL| G[FirestoreManager.updateProfileImageURL]
