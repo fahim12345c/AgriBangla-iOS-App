@@ -7,16 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		38A2814E465EAC899B5D377D /* DiseaseClassificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59BE9006D03F4EBE5F6460F1 /* DiseaseClassificationViewModel.swift */; };
 		4B630ACE002788A11E7C0E42 /* TensorFlowLiteC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8453E5F4A775D06C84B96299 /* TensorFlowLiteC.xcframework */; };
-		791C7F3BED7BB9A310ECF7D8 /* TFLiteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 700E4D526D936FA12ED2429E /* TFLiteService.swift */; };
 		7964F91532816EA9DA5A4C13 /* DrawerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FCAC451489A0BE5224CCECC /* DrawerViewModel.swift */; };
-		847C7DD367D15D5C1D8233DD /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = BABE06D62FAA99EFF882390F /* CameraPreview.swift */; };
-		861B0C4636E875FBEE3CD191 /* ClassificationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 366AE52CE9240FF553BBB0FD /* ClassificationResult.swift */; };
-		88652A8491BA91A166DC2743 /* DiseaseClassificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DC93031D0FBA05D3E17F54 /* DiseaseClassificationView.swift */; };
 		88FA14FB95B5E0FF38BFFCB9 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 97692E411ABAF3CFEBA9313D /* FirebaseFirestore */; };
-		A7F648C3A9CE9D6F46E16B55 /* CloudinaryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15DD4144A0AA09B408ADFFE0 /* CloudinaryService.swift */; };
-		B74AB6CDE918E547CC8D17C6 /* PDFGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC7D913E78DD22FEA7E04DF /* PDFGenerator.swift */; };
 		DD1C74922FD2D033008CA008 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1C74902FD2D033008CA008 /* UserModel.swift */; };
 		DD1C749A2FD2EF7F008CA008 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1C74992FD2EF7F008CA008 /* ChatViewModel.swift */; };
 		DD1C749C2FD2EFB6008CA008 /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1C749B2FD2EFB6008CA008 /* FirestoreManager.swift */; };
@@ -38,6 +31,14 @@
 		DD2886072FA99AC500176DC7 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = DD2886062FA99AC500176DC7 /* FirebaseStorage */; };
 		DD2886092FA99AC500176DC7 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = DD2886082FA99AC500176DC7 /* FirebaseStorageCombine-Community */; };
 		DD28860D2FA9A04D00176DC7 /* FirebaseAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD28860C2FA9A04D00176DC7 /* FirebaseAuthManager.swift */; };
+		DD3B52F32FD6C8FD004DA5FE /* ClassificationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3B52F22FD6C8FD004DA5FE /* ClassificationResult.swift */; };
+		DD3B52F52FD6C97B004DA5FE /* TFLiteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3B52F42FD6C97B004DA5FE /* TFLiteService.swift */; };
+		DD3B52F72FD6C993004DA5FE /* DiseaseReportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3B52F62FD6C993004DA5FE /* DiseaseReportService.swift */; };
+		DD3B52F92FD6C9A9004DA5FE /* PDFGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3B52F82FD6C9A9004DA5FE /* PDFGenerator.swift */; };
+		DD3B52FB2FD6C9D6004DA5FE /* DiseaseClassificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3B52FA2FD6C9D6004DA5FE /* DiseaseClassificationViewModel.swift */; };
+		DD3B52FD2FD6CA29004DA5FE /* DiseaseClassificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3B52FC2FD6CA29004DA5FE /* DiseaseClassificationView.swift */; };
+		DD3B52FF2FD6CA3A004DA5FE /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3B52FE2FD6CA3A004DA5FE /* CameraPreview.swift */; };
+		DD3B53012FD6CB03004DA5FE /* CloudinaryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3B53002FD6CB03004DA5FE /* CloudinaryService.swift */; };
 		DD5FEB9B2FD51498008835A0 /* Cloudinary in Frameworks */ = {isa = PBXBuildFile; productRef = 297DD4EAC79F869FF9B8F0C3 /* Cloudinary */; };
 		DD5FEB9D2FD59248008835A0 /* plantDiseaseModel.tflite in Resources */ = {isa = PBXBuildFile; fileRef = DD5FEB9C2FD59247008835A0 /* plantDiseaseModel.tflite */; };
 		DD5FEB9F2FD59257008835A0 /* lables.txt in Resources */ = {isa = PBXBuildFile; fileRef = DD5FEB9E2FD59257008835A0 /* lables.txt */; };
@@ -83,20 +84,11 @@
 		DDBAF91F2FD4091700460D18 /* ImageUploadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBAF91E2FD4091700460D18 /* ImageUploadService.swift */; };
 		DDBAF9212FD4092300460D18 /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBAF9202FD4092300460D18 /* PostDetailView.swift */; };
 		DDBAF9232FD4093900460D18 /* CommunityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBAF9222FD4093900460D18 /* CommunityViewModel.swift */; };
-		F6724AC5FF4DD70DCA24D125 /* DiseaseReportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E059CCAC5D90E88051ACF8 /* DiseaseReportService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		15DD4144A0AA09B408ADFFE0 /* CloudinaryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CloudinaryService.swift; path = DisasesClassificationApp/Community/Manager/CloudinaryService.swift; sourceTree = SOURCE_ROOT; };
-		366AE52CE9240FF553BBB0FD /* ClassificationResult.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = ClassificationResult.swift; path = DisasesClassificationApp/DiseaseClassification/Model/ClassificationResult.swift; sourceTree = "<group>"; };
-		59BE9006D03F4EBE5F6460F1 /* DiseaseClassificationViewModel.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = DiseaseClassificationViewModel.swift; path = DisasesClassificationApp/DiseaseClassification/ViewModel/DiseaseClassificationViewModel.swift; sourceTree = "<group>"; };
-		5DC7D913E78DD22FEA7E04DF /* PDFGenerator.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = PDFGenerator.swift; path = DisasesClassificationApp/DiseaseClassification/Utility/PDFGenerator.swift; sourceTree = "<group>"; };
 		6FCAC451489A0BE5224CCECC /* DrawerViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DrawerViewModel.swift; sourceTree = "<group>"; };
-		700E4D526D936FA12ED2429E /* TFLiteService.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = TFLiteService.swift; path = DisasesClassificationApp/DiseaseClassification/Service/TFLiteService.swift; sourceTree = "<group>"; };
 		8453E5F4A775D06C84B96299 /* TensorFlowLiteC.xcframework */ = {isa = PBXFileReference; explicitFileType = wrapper.xcframework; name = TensorFlowLiteC.xcframework; path = DisasesClassificationApp/Frameworks/TensorFlowLiteC.xcframework; sourceTree = "<group>"; };
-		A3E059CCAC5D90E88051ACF8 /* DiseaseReportService.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = DiseaseReportService.swift; path = DisasesClassificationApp/DiseaseClassification/Service/DiseaseReportService.swift; sourceTree = "<group>"; };
-		A4DC93031D0FBA05D3E17F54 /* DiseaseClassificationView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = DiseaseClassificationView.swift; path = DisasesClassificationApp/DiseaseClassification/View/DiseaseClassificationView.swift; sourceTree = "<group>"; };
-		BABE06D62FAA99EFF882390F /* CameraPreview.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = CameraPreview.swift; path = DisasesClassificationApp/DiseaseClassification/View/CameraPreview.swift; sourceTree = "<group>"; };
 		DD1C74902FD2D033008CA008 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		DD1C74992FD2EF7F008CA008 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 		DD1C749B2FD2EFB6008CA008 /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
@@ -105,6 +97,14 @@
 		DD2885EB2FA98F2500176DC7 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		DD2885ED2FA98F6C00176DC7 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		DD28860C2FA9A04D00176DC7 /* FirebaseAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthManager.swift; sourceTree = "<group>"; };
+		DD3B52F22FD6C8FD004DA5FE /* ClassificationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassificationResult.swift; sourceTree = "<group>"; };
+		DD3B52F42FD6C97B004DA5FE /* TFLiteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TFLiteService.swift; sourceTree = "<group>"; };
+		DD3B52F62FD6C993004DA5FE /* DiseaseReportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiseaseReportService.swift; sourceTree = "<group>"; };
+		DD3B52F82FD6C9A9004DA5FE /* PDFGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFGenerator.swift; sourceTree = "<group>"; };
+		DD3B52FA2FD6C9D6004DA5FE /* DiseaseClassificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiseaseClassificationViewModel.swift; sourceTree = "<group>"; };
+		DD3B52FC2FD6CA29004DA5FE /* DiseaseClassificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiseaseClassificationView.swift; sourceTree = "<group>"; };
+		DD3B52FE2FD6CA3A004DA5FE /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
+		DD3B53002FD6CB03004DA5FE /* CloudinaryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudinaryService.swift; sourceTree = "<group>"; };
 		DD5FEB9C2FD59247008835A0 /* plantDiseaseModel.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; path = plantDiseaseModel.tflite; sourceTree = "<group>"; };
 		DD5FEB9E2FD59257008835A0 /* lables.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = lables.txt; sourceTree = "<group>"; };
 		DD5FEBA02FD5F621008835A0 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
@@ -214,21 +214,67 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		DD3B52EA2FD6C82F004DA5FE /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				DD3B52F22FD6C8FD004DA5FE /* ClassificationResult.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		DD3B52EC2FD6C82F004DA5FE /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				DD3B52F62FD6C993004DA5FE /* DiseaseReportService.swift */,
+				DD3B52F42FD6C97B004DA5FE /* TFLiteService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		DD3B52ED2FD6C82F004DA5FE /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				DD3B52F82FD6C9A9004DA5FE /* PDFGenerator.swift */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
+		DD3B52EE2FD6C82F004DA5FE /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DD3B52FE2FD6CA3A004DA5FE /* CameraPreview.swift */,
+				DD3B52FC2FD6CA29004DA5FE /* DiseaseClassificationView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DD3B52EF2FD6C82F004DA5FE /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				DD3B52FA2FD6C9D6004DA5FE /* DiseaseClassificationViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		DD3B52F02FD6C82F004DA5FE /* DiseaseClassification */ = {
+			isa = PBXGroup;
+			children = (
+				DD3B52EA2FD6C82F004DA5FE /* Model */,
+				DD3B52EC2FD6C82F004DA5FE /* Service */,
+				DD3B52ED2FD6C82F004DA5FE /* Utility */,
+				DD3B52EE2FD6C82F004DA5FE /* View */,
+				DD3B52EF2FD6C82F004DA5FE /* ViewModel */,
+			);
+			path = DiseaseClassification;
+			sourceTree = "<group>";
+		};
 		DD8E72142FA8D42C0005D254 = {
 			isa = PBXGroup;
 			children = (
 				DD8E72362FA8D5050005D254 /* DisasesClassificationApp */,
 				DD8E721E2FA8D42C0005D254 /* Products */,
 				DDBAF9092FD3C8D500460D18 /* Recovered References */,
-				700E4D526D936FA12ED2429E /* TFLiteService.swift */,
-				366AE52CE9240FF553BBB0FD /* ClassificationResult.swift */,
-				15DD4144A0AA09B408ADFFE0 /* CloudinaryService.swift */,
-				59BE9006D03F4EBE5F6460F1 /* DiseaseClassificationViewModel.swift */,
-				A4DC93031D0FBA05D3E17F54 /* DiseaseClassificationView.swift */,
-				BABE06D62FAA99EFF882390F /* CameraPreview.swift */,
 				8453E5F4A775D06C84B96299 /* TensorFlowLiteC.xcframework */,
-				5DC7D913E78DD22FEA7E04DF /* PDFGenerator.swift */,
-				A3E059CCAC5D90E88051ACF8 /* DiseaseReportService.swift */,
 				DD5FEBA02FD5F621008835A0 /* Config.xcconfig */,
 			);
 			sourceTree = "<group>";
@@ -244,6 +290,7 @@
 		DD8E72362FA8D5050005D254 /* DisasesClassificationApp */ = {
 			isa = PBXGroup;
 			children = (
+				DD3B52F02FD6C82F004DA5FE /* DiseaseClassification */,
 				DDBAF9122FD408A400460D18 /* Community */,
 				DDA658CD2F000020003137CE /* Weather */,
 				DDA658CE2F000021003137CE /* Chat */,
@@ -462,6 +509,7 @@
 		DDBAF90D2FD408A400460D18 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				DD3B53002FD6CB03004DA5FE /* CloudinaryService.swift */,
 				DDBAF91E2FD4091700460D18 /* ImageUploadService.swift */,
 				DDBAF9162FD408DB00460D18 /* CommunityService.swift */,
 			);
@@ -607,21 +655,27 @@
 				DDBAF91B2FD408F100460D18 /* CreatePostView.swift in Sources */,
 				DDA658C22F000010003137CE /* ChatHomeView.swift in Sources */,
 				DDA658C42F000011003137CE /* WeatherFeatureView.swift in Sources */,
+				DD3B52FF2FD6CA3A004DA5FE /* CameraPreview.swift in Sources */,
 				DDA658C62F000012003137CE /* WeatherFeatureViewModel.swift in Sources */,
 				DD1C749E2FD2EFE3008CA008 /* ChatModels.swift in Sources */,
 				DD8A31E52FBDFE010047776D /* DrawerView.swift in Sources */,
+				DD3B53012FD6CB03004DA5FE /* CloudinaryService.swift in Sources */,
 				DDA658C82F000013003137CE /* SprayingCalculator.swift in Sources */,
 				DDA658CA2F000014003137CE /* SprayingModels.swift in Sources */,
 				DDA658CC2F000015003137CE /* WeatherLegendSheetView.swift in Sources */,
 				DD8E72402FA8D5A10005D254 /* Page.swift in Sources */,
 				DD8E72442FA8DABE0005D254 /* CoordinatorView.swift in Sources */,
 				DD2885EE2FA98F6C00176DC7 /* LoginViewModel.swift in Sources */,
+				DD3B52F72FD6C993004DA5FE /* DiseaseReportService.swift in Sources */,
+				DD3B52F32FD6C8FD004DA5FE /* ClassificationResult.swift in Sources */,
 				DDBAF9232FD4093900460D18 /* CommunityViewModel.swift in Sources */,
 				DDBAF9172FD408DB00460D18 /* CommunityService.swift in Sources */,
 				DD92F8E72FAB8FBE005EC045 /* HomeViewModel.swift in Sources */,
+				DD3B52F92FD6C9A9004DA5FE /* PDFGenerator.swift in Sources */,
 				DDBAF9192FD408E700460D18 /* CommunityView.swift in Sources */,
 				DD8E724A2FA8ED660005D254 /* CreateAccountViewModel.swift in Sources */,
 				DD92F8EB2FAB907A005EC045 /* MainTabView.swift in Sources */,
+				DD3B52FB2FD6C9D6004DA5FE /* DiseaseClassificationViewModel.swift in Sources */,
 				DDBAF91D2FD408FA00460D18 /* CreatePostViewModel.swift in Sources */,
 				DD1C749C2FD2EFB6008CA008 /* FirestoreManager.swift in Sources */,
 				DDB045D42FA9C13E002EA282 /* GoogleSignInManager.swift in Sources */,
@@ -636,6 +690,7 @@
 				DD28860D2FA9A04D00176DC7 /* FirebaseAuthManager.swift in Sources */,
 				DD1C74922FD2D033008CA008 /* UserModel.swift in Sources */,
 				DD8E72382FA8D5050005D254 /* HomeView.swift in Sources */,
+				DD3B52FD2FD6CA29004DA5FE /* DiseaseClassificationView.swift in Sources */,
 				DD92F8DE2FAB8252005EC045 /* FeatureModel.swift in Sources */,
 				DDBAF91F2FD4091700460D18 /* ImageUploadService.swift in Sources */,
 				DD8E72392FA8D5050005D254 /* DiseasesClassificationAppApp.swift in Sources */,
@@ -647,17 +702,10 @@
 				DD8A31E72FBDFE4E0047776D /* MenuItem.swift in Sources */,
 				DD92F8E92FAB903E005EC045 /* FeatureCardView.swift in Sources */,
 				DD2885EC2FA98F2500176DC7 /* LoginView.swift in Sources */,
+				DD3B52F52FD6C97B004DA5FE /* TFLiteService.swift in Sources */,
 				DD8E724D2FA8F0220005D254 /* MangoTextField.swift in Sources */,
 				7964F91532816EA9DA5A4C13 /* DrawerViewModel.swift in Sources */,
 				DDBAF90B2FD3DEE200460D18 /* DeepSeekService.swift in Sources */,
-				A7F648C3A9CE9D6F46E16B55 /* CloudinaryService.swift in Sources */,
-				861B0C4636E875FBEE3CD191 /* ClassificationResult.swift in Sources */,
-				791C7F3BED7BB9A310ECF7D8 /* TFLiteService.swift in Sources */,
-				38A2814E465EAC899B5D377D /* DiseaseClassificationViewModel.swift in Sources */,
-				88652A8491BA91A166DC2743 /* DiseaseClassificationView.swift in Sources */,
-				847C7DD367D15D5C1D8233DD /* CameraPreview.swift in Sources */,
-				F6724AC5FF4DD70DCA24D125 /* DiseaseReportService.swift in Sources */,
-				B74AB6CDE918E547CC8D17C6 /* PDFGenerator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
