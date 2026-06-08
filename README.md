@@ -234,7 +234,7 @@ flowchart TD
     C --> C6
     C6 --> D[Show: Diagnosis Results Card]
     
-    D --> E{User taps<br>"Generate Advice Report"?}
+    D --> E{Generate Advice<br>Report?}
     E -->|Yes| F[DiseaseReportService.generateReport]
     
     subgraph AI [AI Report Generation]
@@ -249,7 +249,7 @@ flowchart TD
     F --> F5
     F5 --> G[Show Bangla report card]
     
-    G --> H{User taps<br>"Download PDF"?}
+    G --> H{Download PDF?}
     H -->|Yes| I[PDFGenerator.generate]
     I --> J[Share Sheet<br>AirDrop / WhatsApp / Files]
 ```
