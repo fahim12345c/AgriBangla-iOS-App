@@ -6,7 +6,7 @@
 //
 //
 //  MainTabView.swift
-//  AgriAI Dashboard
+//  Agri BD Dashboard
 //
 
 import SwiftUI
@@ -20,12 +20,13 @@ enum AppTab: Int, CaseIterable {
     case diseases
 
     var title: String {
+        let lm = LocalizationManager.shared
         switch self {
-        case .home:      return "Home"
-        case .weather:   return "Weather"
-        case .chat:      return "Chat"
-        case .community: return "Community"
-        case .diseases:  return "Diseases"
+        case .home:      return lm.localized("tab_home")
+        case .weather:   return lm.localized("tab_weather")
+        case .chat:      return lm.localized("tab_chat")
+        case .community: return lm.localized("tab_community")
+        case .diseases:  return lm.localized("tab_diseases")
         }
     }
 
@@ -43,8 +44,8 @@ enum AppTab: Int, CaseIterable {
 // MARK: - MainTabView
 struct MainTabView: View {
     @State private var selectedTab: AppTab = .home
+    @StateObject private var langManager = LocalizationManager.shared
 
-    // Pass from your coordinator / auth flow
     var userName: String = "Farmer"
 
     var onDiseaseScannerTap: (() -> Void)? = nil

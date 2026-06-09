@@ -6,6 +6,7 @@ struct PostDetailView: View {
     let post: CommunityPost
     var onDelete: (() -> Void)?
     @StateObject private var viewModel: PostDetailViewModel
+    @StateObject private var lm = LocalizationManager.shared
     @State private var commentText = ""
     @State private var showDeleteConfirm = false
     @Environment(\.dismiss) private var dismiss
@@ -33,7 +34,7 @@ struct PostDetailView: View {
 
             commentInputBar
         }
-        .navigationTitle("Post")
+        .navigationTitle(lm.localized("community_title"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             if post.userId == Auth.auth().currentUser?.uid {
@@ -45,14 +46,14 @@ struct PostDetailView: View {
                 }
             }
         }
-        .confirmationDialog("Delete Post?", isPresented: $showDeleteConfirm) {
-            Button("Delete", role: .destructive) {
+        .confirmationDialog(lm.localized("community_delete_confirm"), isPresented: $showDeleteConfirm) {
+            Button(lm.localized("community_delete"), role: .destructive) {
                 onDelete?()
                 dismiss()
             }
-            Button("Cancel", role: .cancel) { }
+            Button(lm.localized("community_cancel"), role: .cancel) { }
         } message: {
-            Text("This will permanently delete your post and all its comments.")
+            LText("community_delete_message")
         }
         .onAppear { viewModel.loadData() }
     }
@@ -207,7 +208,7 @@ struct PostDetailView: View {
         VStack(spacing: 0) {
             Divider()
             HStack(spacing: 10) {
-                TextField("Write a comment...", text: $commentText)
+                TextField(lm.localized("community_comment_placeholder"), text: $commentText)
                     .font(.system(size: 15))
                     .padding(.horizontal, 14)
                     .padding(.vertical, 10)

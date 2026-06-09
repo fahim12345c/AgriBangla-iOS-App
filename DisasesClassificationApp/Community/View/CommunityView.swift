@@ -3,6 +3,7 @@ import FirebaseAuth
 
 struct CommunityView: View {
     @StateObject private var viewModel = CommunityViewModel()
+    @StateObject private var lm = LocalizationManager.shared
     @State private var showCreatePost = false
     @State private var editingPost: CommunityPost?
     @State private var editText = ""
@@ -19,7 +20,7 @@ struct CommunityView: View {
                     VStack(spacing: 12) {
                         ProgressView()
                             .scaleEffect(1.2)
-                        Text("Loading...")
+                        LText("community_loading")
                             .font(.system(size: 14))
                             .foregroundColor(.secondary)
                     }
@@ -38,6 +39,7 @@ struct CommunityView: View {
                         Button(action: { showCreatePost = true }) {
                             Image(systemName: "plus")
                                 .font(.system(size: 22, weight: .bold))
+                                .accessibilityLabel(Text(lm.localized("community_create_post")))
                                 .foregroundColor(.white)
                                 .frame(width: 56, height: 56)
                                 .background(brandGreen)
@@ -49,7 +51,7 @@ struct CommunityView: View {
                     }
                 }
             }
-            .navigationTitle("Community")
+            .navigationTitle(lm.localized("community_title"))
             .sheet(isPresented: $showCreatePost) {
                 CreatePostView { text, image in
                     Task { await viewModel.createPost(text: text, selectedImage: image) }
@@ -79,14 +81,14 @@ struct CommunityView: View {
             }
             .padding(16)
             .background(Color(red: 0.95, green: 0.97, blue: 0.95).ignoresSafeArea())
-            .navigationTitle("Edit Post")
+            .navigationTitle(lm.localized("community_edit_post"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { editingPost = nil }
+                    Button(lm.localized("community_cancel")) { editingPost = nil }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
+                    Button(lm.localized("general_save")) {
                         let text = editText
                         editingPost = nil
                         Task { await viewModel.updatePost(postId: post.id, text: text) }
@@ -105,14 +107,14 @@ struct CommunityView: View {
             Image(systemName: "exclamationmark.triangle.fill")
                 .font(.system(size: 48))
                 .foregroundColor(.orange)
-            Text("Something went wrong")
+            LText("general_error")
                 .font(.system(size: 18, weight: .semibold))
             Text(message)
                 .font(.system(size: 14))
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 40)
-            Button("Try Again") { viewModel.fetchPosts() }
+            Button(lm.localized("general_try_again")) { viewModel.fetchPosts() }
                 .font(.system(size: 15, weight: .semibold))
                 .foregroundColor(brandGreen)
                 .padding(.horizontal, 24)
@@ -129,12 +131,9 @@ struct CommunityView: View {
             Image(systemName: "person.3.fill")
                 .font(.system(size: 56))
                 .foregroundColor(brandGreen.opacity(0.4))
-            Text("No posts yet")
+            LText("community_no_posts")
                 .font(.system(size: 18, weight: .semibold))
                 .foregroundColor(.gray)
-            Text("Be the first to share with the community")
-                .font(.system(size: 14))
-                .foregroundColor(.gray.opacity(0.7))
             Spacer()
         }
     }
@@ -174,6 +173,7 @@ struct PostCardView: View {
     var onDelete: (() -> Void)?
 
     @State private var showDeleteConfirm = false
+    @StateObject private var lm = LocalizationManager.shared
 
     private let brandGreen = Color(red: 0.18, green: 0.55, blue: 0.34)
 
@@ -209,11 +209,11 @@ struct PostCardView: View {
                     }
                 }
             }
-            .confirmationDialog("Delete Post?", isPresented: $showDeleteConfirm) {
-                Button("Delete", role: .destructive) { onDelete?() }
-                Button("Cancel", role: .cancel) { }
+            .confirmationDialog(lm.localized("community_delete_confirm"), isPresented: $showDeleteConfirm) {
+                Button(lm.localized("community_delete"), role: .destructive) { onDelete?() }
+                Button(lm.localized("community_cancel"), role: .cancel) { }
             } message: {
-                Text("This will permanently delete your post.")
+                LText("community_delete_message")
             }
 
             Text(post.text)

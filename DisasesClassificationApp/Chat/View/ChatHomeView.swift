@@ -3,6 +3,7 @@ import SwiftUI
 struct ChatHomeView: View {
     @StateObject private var viewModel = ChatViewModel()
     @FocusState private var isInputFocused: Bool
+    @StateObject private var lm = LocalizationManager.shared
 
     private let brandGreen = Color(red: 0.18, green: 0.55, blue: 0.34)
     private let bgColor = Color(red: 0.95, green: 0.97, blue: 0.95)
@@ -147,7 +148,7 @@ struct ChatHomeView: View {
         VStack(spacing: 0) {
             Divider()
             HStack(spacing: 10) {
-                TextField("আপনার প্রশ্ন লিখুন...", text: $viewModel.inputText)
+                TextField(lm.localized("chat_placeholder"), text: $viewModel.inputText)
                     .font(.system(size: 16))
                     .focused($isInputFocused)
                     .padding(.horizontal, 16)

@@ -6,6 +6,7 @@ struct DiseaseClassificationView: View {
     @State private var photoItem: PhotosPickerItem?
     @State private var showShareSheet = false
     @State private var shareData: Data?
+    @StateObject private var lm = LocalizationManager.shared
 
     private let brandGreen = Color(red: 0.18, green: 0.55, blue: 0.34)
     private let bgColor = Color(red: 0.95, green: 0.97, blue: 0.95)
@@ -25,12 +26,12 @@ struct DiseaseClassificationView: View {
                     emptyState
                 }
             }
-            .navigationTitle("Disease Scanner")
+            .navigationTitle(lm.localized("disease_title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 if viewModel.selectedImage != nil {
                     ToolbarItem(placement: .topBarTrailing) {
-                        Button("New Scan") { viewModel.reset() }
+                        Button(action: viewModel.reset) { LText("disease_new_scan") }
                     }
                 }
             }
@@ -57,14 +58,14 @@ struct DiseaseClassificationView: View {
                     photoItem = nil
                 }
             }
-            .confirmationDialog("Select Image Source", isPresented: $viewModel.showImageSourcePicker) {
+            .confirmationDialog(lm.localized("disease_select_source"), isPresented: $viewModel.showImageSourcePicker) {
                 if viewModel.hasCameraPermission == true {
-                    Button("Camera") { viewModel.showCamera = true }
+                    Button { viewModel.showCamera = true } label: { LText("disease_take_photo") }
                 }
-                Button("Photo Library") { viewModel.showPhotoPicker = true }
-                Button("Cancel", role: .cancel) { }
+                Button { viewModel.showPhotoPicker = true } label: { LText("disease_choose_library") }
+                Button(role: .cancel) { } label: { LText("general_cancel") }
             } message: {
-                Text("Choose how to select a leaf image")
+                Text(lm.localized("disease_scan_desc"))
             }
             .sheet(isPresented: $showShareSheet) {
                 if let data = shareData {
@@ -78,7 +79,7 @@ struct DiseaseClassificationView: View {
         VStack(spacing: 16) {
             ProgressView()
                 .scaleEffect(1.5)
-            Text("Loading model...")
+            LText("disease_loading_model")
                 .font(.system(size: 15))
                 .foregroundColor(.secondary)
         }
@@ -90,14 +91,14 @@ struct DiseaseClassificationView: View {
             Image(systemName: "exclamationmark.triangle.fill")
                 .font(.system(size: 48))
                 .foregroundColor(.orange)
-            Text("Something went wrong")
+            LText("general_error")
                 .font(.system(size: 18, weight: .semibold))
             Text(message)
                 .font(.system(size: 14))
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 40)
-            Button("Try Again") { viewModel.loadModel() }
+            Button { viewModel.loadModel() } label: { LText("general_try_again") }
                 .font(.system(size: 15, weight: .semibold))
                 .foregroundColor(brandGreen)
                 .padding(.horizontal, 24)
@@ -116,10 +117,10 @@ struct DiseaseClassificationView: View {
                 .font(.system(size: 64))
                 .foregroundColor(brandGreen.opacity(0.5))
 
-            Text("Scan a Plant Leaf")
+            LText("disease_scan_leaf")
                 .font(.system(size: 22, weight: .bold))
 
-            Text("Take a photo or choose from your library\nto identify plant diseases")
+            LText("disease_scan_desc")
                 .font(.system(size: 15))
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -132,7 +133,7 @@ struct DiseaseClassificationView: View {
                     HStack(spacing: 10) {
                         Image(systemName: "camera.fill")
                             .font(.system(size: 18))
-                        Text("Take Photo")
+                        LText("disease_take_photo")
                             .font(.system(size: 16, weight: .semibold))
                     }
                     .foregroundColor(.white)
@@ -146,7 +147,7 @@ struct DiseaseClassificationView: View {
                     HStack(spacing: 10) {
                         Image(systemName: "photo.on.rectangle")
                             .font(.system(size: 18))
-                        Text("Choose from Library")
+                        LText("disease_choose_library")
                             .font(.system(size: 16, weight: .semibold))
                     }
                     .foregroundColor(brandGreen)
@@ -177,7 +178,7 @@ struct DiseaseClassificationView: View {
                     VStack(spacing: 12) {
                         ProgressView()
                             .scaleEffect(1.2)
-                        Text("Analyzing...")
+                        LText("disease_analyzing")
                             .font(.system(size: 15))
                             .foregroundColor(.secondary)
                     }
@@ -210,7 +211,7 @@ struct DiseaseClassificationView: View {
     private var reportSection: some View {
         if let report = viewModel.reportText {
             VStack(alignment: .leading, spacing: 12) {
-                Text("📋 রোগ নির্ণয় রিপোর্ট")
+                LText("disease_report_title")
                     .font(.system(size: 17, weight: .bold))
 
                 Text(report)
@@ -221,7 +222,7 @@ struct DiseaseClassificationView: View {
                 Button(action: sharePDF) {
                     HStack(spacing: 8) {
                         Image(systemName: "arrow.down.doc.fill")
-                        Text("Download PDF")
+                        LText("disease_download_pdf")
                             .font(.system(size: 15, weight: .semibold))
                     }
                     .foregroundColor(.white)
@@ -241,7 +242,7 @@ struct DiseaseClassificationView: View {
             VStack(spacing: 12) {
                 ProgressView()
                     .scaleEffect(1.1)
-                Text("Generating Bangla report...")
+                LText("disease_generating")
                     .font(.system(size: 14))
                     .foregroundColor(.secondary)
             }
@@ -254,7 +255,7 @@ struct DiseaseClassificationView: View {
             Button(action: { viewModel.generateReport() }) {
                 HStack(spacing: 8) {
                     Image(systemName: "doc.text.magnifyingglass")
-                    Text("Generate Advice Report (বাংলা)")
+                    LText("disease_generate_report")
                         .font(.system(size: 15, weight: .semibold))
                 }
                 .foregroundColor(brandGreen)
@@ -269,7 +270,7 @@ struct DiseaseClassificationView: View {
 
     private func resultsCard(_ result: ClassificationOutput) -> some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Diagnosis Results")
+            LText("disease_results")
                 .font(.system(size: 18, weight: .bold))
 
             if let top = result.topResults.first {
@@ -291,7 +292,7 @@ struct DiseaseClassificationView: View {
             }
 
             if result.topResults.count > 1 {
-                Text("Other possibilities")
+                LText("disease_other")
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(.secondary)
 

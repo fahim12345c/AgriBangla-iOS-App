@@ -29,6 +29,13 @@ struct HomeView: View {
     @State private var showPhotoPicker = false
     @State private var showUploadError = false
     @State private var photoItem: PhotosPickerItem?
+    @State private var showNewsSheet = false
+    @State private var showProfileSheet = false
+    @State private var showTutorialsSheet = false
+    @State private var showAboutSheet = false
+    @State private var showHelpSheet = false
+    @StateObject private var lm = LocalizationManager.shared
+    private let newsURL = URL(string: "https://www.bssnews.net/bangla/national/agriculture-news")!
 
     // Brand green — defined inline so no asset needed
     private let brandGreen = Color(red: 0.18, green: 0.55, blue: 0.34)
@@ -84,8 +91,12 @@ struct HomeView: View {
                         case .weather: onWeatherTap?()
                         case .diseaseScanner: onDiseaseScannerTap?()
                         case .community: onCommunityTap?()
-                        case .profile: onProfileTap?()
-                        default: break
+                        case .profile: showProfileSheet = true
+                        case .agriNews: showNewsSheet = true
+                        case .tutorials: showTutorialsSheet = true
+                        case .about: showAboutSheet = true
+                        case .help: showHelpSheet = true
+                        case .changeLanguage: break
                         }
                     })
                         .frame(width: UIScreen.main.bounds.width * 0.75)
@@ -121,13 +132,29 @@ struct HomeView: View {
                 photoItem = nil
             }
         }
+        .sheet(isPresented: $showNewsSheet) {
+            SafariView(url: newsURL)
+                .ignoresSafeArea()
+        }
+        .sheet(isPresented: $showProfileSheet) {
+            ProfileView()
+        }
+        .sheet(isPresented: $showTutorialsSheet) {
+            TutorialsView()
+        }
+        .sheet(isPresented: $showAboutSheet) {
+            AboutView()
+        }
+        .sheet(isPresented: $showHelpSheet) {
+            HelpView()
+        }
         .onChange(of: viewModel.profileUploadError) { _ in
             if viewModel.profileUploadError != nil {
                 showUploadError = true
             }
         }
-        .alert("Upload Failed", isPresented: $showUploadError) {
-            Button("OK", role: .cancel) {
+        .alert(lm.localized("upload_failed"), isPresented: $showUploadError) {
+            Button(lm.localized("general_ok"), role: .cancel) {
                 viewModel.profileUploadError = nil
             }
         } message: {
@@ -173,7 +200,7 @@ struct HomeView: View {
             }
 
             // Title
-            Text("Agri AI")
+            Text("Agri BD")
                 .font(.system(size: 22, weight: .bold, design: .rounded))
                 .foregroundColor(.white)
 
@@ -184,7 +211,7 @@ struct HomeView: View {
                 HStack(spacing: 5) {
                     Image(systemName: "magnifyingglass")
                         .font(.system(size: 13, weight: .semibold))
-                    Text("Search")
+                    Text(lm.localized("home_search"))
                         .font(.system(size: 13, weight: .medium))
                 }
                 .foregroundColor(.white)
@@ -218,7 +245,7 @@ struct HomeView: View {
     private var welcomeSection: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text("Welcome 👋")
+                LText("home_welcome")
                     .font(.system(size: 13, weight: .medium))
                     .foregroundColor(.gray)
                 Text(viewModel.userName.isEmpty ? "User" : viewModel.userName)
@@ -283,7 +310,7 @@ struct HomeView: View {
     // MARK: - Weather Section
     private var weatherSection: some View {
         VStack(alignment: .leading, spacing: 10) {
-            sectionHeader(title: "Weather Conditions", icon: "cloud.sun.fill")
+            sectionHeader(title: lm.localized("home_weather_conditions"), icon: "cloud.sun.fill")
                 .onTapGesture { onWeatherTap?() }
             WeatherCardView(
                 locationTitle: viewModel.locationTitle,
@@ -297,7 +324,7 @@ struct HomeView: View {
     // MARK: - Feature Grid Section
     private var featureGridSection: some View {
         VStack(alignment: .leading, spacing: 10) {
-            sectionHeader(title: "Agri AI Smart Support", icon: "sparkles")
+            sectionHeader(title: lm.localized("home_smart_support"), icon: "sparkles")
             LazyVGrid(
                 columns: [GridItem(.flexible(), spacing: 14), GridItem(.flexible(), spacing: 14)],
                 spacing: 14

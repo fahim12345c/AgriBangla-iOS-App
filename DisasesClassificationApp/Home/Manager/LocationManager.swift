@@ -7,7 +7,7 @@
 
 //
 //  LocationManager.swift
-//  AgriAI Dashboard
+//  Agri BD Dashboard
 //
 
 import Foundation

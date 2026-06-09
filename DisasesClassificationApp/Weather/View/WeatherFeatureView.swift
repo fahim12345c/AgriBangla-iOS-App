@@ -7,6 +7,9 @@ struct WeatherFeatureView: View {
 
     private let brandGreen = Color(red: 0.18, green: 0.55, blue: 0.34)
     @State private var isLegendPresented = false
+    @State private var showBamisSheet = false
+    @StateObject private var lm = LocalizationManager.shared
+    private let bamisURL = URL(string: "https://www.bamis.gov.bd")!
 
     var body: some View {
         VStack(spacing: 0) {
@@ -27,6 +30,8 @@ struct WeatherFeatureView: View {
                         } else {
                             detailsContent
                         }
+
+                        bamisLinkCard
                         Spacer(minLength: 24)
                     }
                     .padding(.horizontal, 16)
@@ -40,6 +45,10 @@ struct WeatherFeatureView: View {
             WeatherLegendSheetView()
                 .presentationDetents([.large])
         }
+        .sheet(isPresented: $showBamisSheet) {
+            SafariView(url: bamisURL)
+                .ignoresSafeArea()
+        }
     }
 
     private var loadingState: some View {
@@ -47,7 +56,7 @@ struct WeatherFeatureView: View {
             Spacer()
             ProgressView()
                 .scaleEffect(1.5)
-            Text("আবহাওয়া তথ্য আনা হচ্ছে...")
+            LText("weather_loading")
                 .font(.system(size: 16, weight: .medium))
                 .foregroundColor(.secondary)
             Spacer()
@@ -85,10 +94,10 @@ struct WeatherFeatureView: View {
             .accessibilityLabel("Back")
 
             VStack(alignment: .leading, spacing: 1) {
-                Text("আবহাওয়া · Weather")
+                LText("weather_title")
                     .font(.system(size: 17, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
-                Text("Farmer Dashboard")
+                LText("weather_dashboard")
                     .font(.system(size: 11))
                     .foregroundStyle(.white.opacity(0.70))
             }
@@ -203,8 +212,8 @@ struct WeatherFeatureView: View {
     // MARK: - Mode Tabs
     private var modeTabs: some View {
         Picker("", selection: $vm.mode) {
-            Text("💧 কীটনাশক · Spray").tag(WeatherFeatureViewModel.Mode.spraying)
-            Text("📋 বিস্তারিত · Details").tag(WeatherFeatureViewModel.Mode.details)
+            LText("weather_spray_tab").tag(WeatherFeatureViewModel.Mode.spraying)
+            LText("weather_details_tab").tag(WeatherFeatureViewModel.Mode.details)
         }
         .pickerStyle(.segmented)
     }
@@ -219,7 +228,7 @@ struct WeatherFeatureView: View {
 
     private var applicationTypeCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Label("কী দিচ্ছেন · Application Type", systemImage: "drop.halffull")
+            Label(lm.localized("spray_application_type"), systemImage: "drop.halffull")
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(.secondary)
 
@@ -273,7 +282,7 @@ struct WeatherFeatureView: View {
             // Status banner
             HStack(alignment: .center) {
                 VStack(alignment: .leading, spacing: 5) {
-                    Text("এখন স্প্রে করা যাবে? · Spray Window")
+                    LText("spray_window")
                         .font(.system(size: 11, weight: .semibold))
                         .foregroundStyle(.secondary)
                         .kerning(0.3)
@@ -352,7 +361,7 @@ struct WeatherFeatureView: View {
                 Image(systemName: "lightbulb.fill")
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(.orange)
-                Text("পরামর্শ · Advice")
+                LText("spray_advice")
                     .font(.system(size: 16, weight: .bold))
             }
 
@@ -378,21 +387,21 @@ struct WeatherFeatureView: View {
     // MARK: - Details Content
     private var detailsContent: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader("এখনকার অবস্থা · Current Conditions", icon: "thermometer.sun.fill")
+            sectionHeader(lm.localized("weather_current_conditions"), icon: "thermometer.sun.fill")
 
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                DetailTile(title: "গরম অনুভব\nFeels Like", value: vm.feelsLikeText, icon: "thermometer",   tint: .orange)
-                DetailTile(title: "আর্দ্রতা\nHumidity",    value: vm.humidityText,  icon: "humidity.fill", tint: .blue)
-                DetailTile(title: "বাতাস\nWind",           value: vm.windText,      icon: "wind",          tint: .teal)
-                DetailTile(title: "বায়ুচাপ\nPressure",    value: vm.pressureText,  icon: "gauge",         tint: .indigo)
+                DetailTile(titleKey: "weather_feels_like", value: vm.feelsLikeText, icon: "thermometer",   tint: .orange)
+                DetailTile(titleKey: "weather_humidity",    value: vm.humidityText,  icon: "humidity.fill", tint: .blue)
+                DetailTile(titleKey: "weather_wind",        value: vm.windText,      icon: "wind",          tint: .teal)
+                DetailTile(titleKey: "weather_pressure",    value: vm.pressureText,  icon: "gauge",         tint: .indigo)
             }
 
-            sectionHeader("বৃষ্টিপাত · Precipitation", icon: "cloud.rain.fill")
+            sectionHeader(lm.localized("weather_precipitation"), icon: "cloud.rain.fill")
                 .padding(.top, 4)
 
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                DetailTile(title: "বৃষ্টি (১ ঘণ্টা)\nRain (1h)", value: vm.rainText,   icon: "cloud.rain.fill", tint: .blue)
-                DetailTile(title: "মেঘ\nClouds",                  value: vm.cloudsText, icon: "cloud.fill",      tint: .gray)
+                DetailTile(titleKey: "weather_rain_1h", value: vm.rainText,   icon: "cloud.rain.fill", tint: .blue)
+                DetailTile(titleKey: "weather_clouds",  value: vm.cloudsText, icon: "cloud.fill",      tint: .gray)
             }
         }
         .padding(.top, 2)
@@ -412,9 +421,9 @@ struct WeatherFeatureView: View {
     // MARK: - Helpers
     private func farmerStatusLabel(_ status: SprayingWindowStatus) -> String {
         switch status {
-        case .optimal: return "✓ এখন স্প্রে করুন — Good to spray"
-        case .marginal: return "⚠️ সাবধানে করুন — Spray carefully"
-        case .poor:    return "✗ এখন করবেন না — Do not spray now"
+        case .optimal: return lm.localized("spray_optimal")
+        case .marginal: return lm.localized("spray_marginal")
+        case .poor:    return lm.localized("spray_poor")
         }
     }
 
@@ -460,6 +469,44 @@ struct WeatherFeatureView: View {
         case .info: return .blue
         }
     }
+
+    // MARK: - BAMIS Link Card
+    private var bamisLinkCard: some View {
+        Button(action: { showBamisSheet = true }) {
+            HStack(spacing: 14) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .fill(Color.green.opacity(0.12))
+                        .frame(width: 48, height: 48)
+                    Image(systemName: "globe.badge.chevron.backward")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundStyle(brandGreen)
+                }
+
+                VStack(alignment: .leading, spacing: 3) {
+                    LText("weather_bamis_title")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(.primary)
+                    LText("weather_bamis_subtitle")
+                        .font(.system(size: 11))
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(.secondary)
+            }
+            .padding(16)
+            .background(
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .fill(Color(.systemBackground))
+                    .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 4)
+            )
+        }
+        .buttonStyle(.plain)
+    }
 }
 
 // MARK: - Double extension
@@ -469,7 +516,7 @@ private extension Double {
 
 // MARK: - DetailTile
 private struct DetailTile: View {
-    let title: String
+    let titleKey: String
     let value: String
     let icon: String
     let tint: Color
@@ -486,7 +533,7 @@ private struct DetailTile: View {
                 )
 
             VStack(alignment: .leading, spacing: 3) {
-                Text(title)
+                LText(titleKey)
                     .font(.system(size: 10, weight: .semibold))
                     .foregroundStyle(.secondary)
                     .lineLimit(2)

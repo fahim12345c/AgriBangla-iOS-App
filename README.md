@@ -1,4 +1,4 @@
-# 🌾 Agri AI — Smart Farming Assistant
+# 🌾 Agri BD — Smart Farming Assistant
 
 > An iOS app for Bangladeshi farmers to diagnose plant diseases via on-device AI, get Bangla treatment advice with medicine recommendations, check spray-weather windows, chat with an AI assistant in Bangla, and connect with a farming community.
 

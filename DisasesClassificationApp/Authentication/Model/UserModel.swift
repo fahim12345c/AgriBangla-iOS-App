@@ -11,5 +11,6 @@ struct UserModel: Codable, Identifiable {
     var firstName: String?
     var lastName: String?
     var profileImageURL: String?
+    var dateOfBirth: Date?
     let createdAt: Date
 }

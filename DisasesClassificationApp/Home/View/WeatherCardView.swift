@@ -12,6 +12,7 @@ struct WeatherCardView: View {
     let state: WeatherLoadState
     let onRefresh: () -> Void
 
+    @StateObject private var lm = LocalizationManager.shared
     private let farmGreen = Color(red: 0.18, green: 0.49, blue: 0.20)
 
     var body: some View {

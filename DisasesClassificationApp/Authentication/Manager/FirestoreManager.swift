@@ -13,14 +13,17 @@ final class FirestoreManager {
 
     private init() {}
 
-    func createUserDocument(user: User, firstName: String, lastName: String) async throws {
-        let userData: [String: Any] = [
+    func createUserDocument(user: User, firstName: String, lastName: String, dateOfBirth: Date? = nil) async throws {
+        var userData: [String: Any] = [
             "id": user.uid,
             "email": user.email ?? "",
             "firstName": firstName,
             "lastName": lastName,
             "createdAt": FieldValue.serverTimestamp()
         ]
+        if let dob = dateOfBirth {
+            userData["dateOfBirth"] = Timestamp(date: dob)
+        }
 
         try await db.collection("users").document(user.uid).setData(userData, merge: true)
     }
@@ -34,6 +37,7 @@ final class FirestoreManager {
             firstName: data["firstName"] as? String,
             lastName: data["lastName"] as? String,
             profileImageURL: data["profileImageURL"] as? String,
+            dateOfBirth: (data["dateOfBirth"] as? Timestamp)?.dateValue(),
             createdAt: (data["createdAt"] as? Timestamp)?.dateValue() ?? Date()
         )
     }

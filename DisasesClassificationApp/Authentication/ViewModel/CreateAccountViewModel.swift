@@ -51,6 +51,7 @@ final class CreateAccountViewModel: ObservableObject, Identifiable {
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var confirmPassword: String = ""
+    @Published var dateOfBirth: Date = Calendar.current.date(byAdding: .year, value: -18, to: Date()) ?? Date()
 
     // MARK: - Published UI State
     @Published var isPasswordVisible: Bool = false
@@ -230,7 +231,8 @@ final class CreateAccountViewModel: ObservableObject, Identifiable {
             try await FirestoreManager.shared.createUserDocument(
                 user: result.user,
                 firstName: firstName.trimmingCharacters(in: .whitespaces),
-                lastName: lastName.trimmingCharacters(in: .whitespaces)
+                lastName: lastName.trimmingCharacters(in: .whitespaces),
+                dateOfBirth: dateOfBirth
             )
 
             authState = .success

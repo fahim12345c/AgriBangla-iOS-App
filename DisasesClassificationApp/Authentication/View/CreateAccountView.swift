@@ -16,6 +16,7 @@ struct CreateAccountView: View {
         @State private var headerScale: CGFloat = 0.85
         @State private var formOpacity: Double = 0
         @State private var formOffset: CGFloat = 30
+        @StateObject private var lm = LocalizationManager.shared
     var body: some View {
         
         ZStack {
@@ -79,7 +80,7 @@ struct CreateAccountView: View {
             }
         }
         .alert(item: alertItem) { item in
-            Alert(title: Text("Error"), message: Text(item.message), dismissButton: .default(Text("OK")) {
+            Alert(title: Text(lm.localized("register_error")), message: Text(item.message), dismissButton: .default(Text(lm.localized("general_ok"))) {
                 viewModel.resetState()
             })
         }
@@ -94,7 +95,7 @@ struct CreateAccountView: View {
                .shadow(color: MangoTheme.primaryOrange.opacity(0.35), radius: 16, x: 0, y: 8)
 
            VStack(spacing: 10) {
-               // Mango icon
+                // App icon
                ZStack {
                    Circle()
                        .fill(Color.white.opacity(0.25))
@@ -107,11 +108,11 @@ struct CreateAccountView: View {
                }
                .padding(.top, 28)
 
-               Text("Join Mango")
-                   .font(.system(size: 24, weight: .bold, design: .rounded))
-                   .foregroundColor(.white)
+                LText("register_join")
+                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                    .foregroundColor(.white)
 
-               Text("Create your account to get started")
+                LText("register_subtitle")
                    .font(.system(size: 13, weight: .regular))
                    .foregroundColor(.white.opacity(0.85))
                    .padding(.bottom, 28)
@@ -125,10 +126,10 @@ struct CreateAccountView: View {
        VStack(spacing: 16) {
 
            // First Name
-           MangoTextField(
-               placeholder: "First Name",
-               systemImage: "person",
-               text: $viewModel.firstName,
+            MangoTextField(
+                placeholder: lm.localized("register_first_name"),
+                systemImage: "person",
+                text: $viewModel.firstName,
                errorMessage: viewModel.firstNameError,
                onEditingChanged: { focused in
                    if !focused { viewModel.validateFirstName() }
@@ -136,10 +137,10 @@ struct CreateAccountView: View {
            )
 
            // Last Name
-           MangoTextField(
-               placeholder: "Last Name",
-               systemImage: "person",
-               text: $viewModel.lastName,
+            MangoTextField(
+                placeholder: lm.localized("register_last_name"),
+                systemImage: "person",
+                text: $viewModel.lastName,
                errorMessage: viewModel.lastNameError,
                onEditingChanged: { focused in
                    if !focused { viewModel.validateLastName() }
@@ -147,10 +148,10 @@ struct CreateAccountView: View {
            )
 
            // Email
-           MangoTextField(
-               placeholder: "Email Address",
-               systemImage: "envelope",
-               text: $viewModel.email,
+            MangoTextField(
+                placeholder: lm.localized("register_email"),
+                systemImage: "envelope",
+                text: $viewModel.email,
                errorMessage: viewModel.emailError,
                onEditingChanged: { focused in
                    if !focused { viewModel.validateEmail() }
@@ -159,14 +160,14 @@ struct CreateAccountView: View {
 
            // Password
            VStack(alignment: .leading, spacing: 8) {
-               MangoTextField(
-                   placeholder: "Password",
-                   systemImage: "lock",
-                   text: $viewModel.password,
-                   errorMessage: viewModel.passwordError,
-                   isSecure: true,
-                   isRevealed: viewModel.isPasswordVisible,
-                   toggleReveal: { viewModel.isPasswordVisible.toggle() },
+                MangoTextField(
+                    placeholder: lm.localized("register_password"),
+                    systemImage: "lock",
+                    text: $viewModel.password,
+                    errorMessage: viewModel.passwordError,
+                    isSecure: true,
+                    isRevealed: viewModel.isPasswordVisible,
+                    toggleReveal: { viewModel.isPasswordVisible.toggle() },
                    onEditingChanged: { focused in
                        if !focused { viewModel.validatePassword() }
                    }
@@ -180,10 +181,10 @@ struct CreateAccountView: View {
            .animation(.spring(response: 0.3), value: viewModel.password.isEmpty)
 
            // Confirm Password
-           MangoTextField(
-               placeholder: "Confirm Password",
-               systemImage: "lock",
-               text: $viewModel.confirmPassword,
+            MangoTextField(
+                placeholder: lm.localized("register_confirm_password"),
+                systemImage: "lock",
+                text: $viewModel.confirmPassword,
                errorMessage: viewModel.confirmPasswordError,
                isSecure: true,
                isRevealed: viewModel.isConfirmPasswordVisible,
@@ -193,9 +194,33 @@ struct CreateAccountView: View {
                }
            )
 
-           // Create Account Button
-           createAccountButton
-               .padding(.top, 8)
+            // Date of Birth
+            VStack(alignment: .leading, spacing: 6) {
+                LText("register_date_of_birth")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundColor(.gray)
+                DatePicker(
+                    selection: $viewModel.dateOfBirth,
+                    in: ...Calendar.current.date(byAdding: .year, value: -12, to: Date())!,
+                    displayedComponents: .date
+                ) {
+                    Text("")
+                }
+                .datePickerStyle(.compact)
+                .padding(12)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color(.systemBackground))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                        )
+                )
+            }
+
+            // Create Account Button
+            createAccountButton
+                .padding(.top, 8)
 
            // Terms note
            termsNote
@@ -235,9 +260,9 @@ struct CreateAccountView: View {
                                CircularProgressViewStyle(tint: .white)
                            )
                    } else {
-                       Text("Create Account")
-                           .font(.system(size: 16, weight: .semibold, design: .rounded))
-                           .foregroundColor(
+                        LText("register_create_account")
+                            .font(.system(size: 16, weight: .semibold, design: .rounded))
+                            .foregroundColor(
                                viewModel.isFormValid ? .white : .gray
                            )
                    }
@@ -252,7 +277,7 @@ struct CreateAccountView: View {
 
    // MARK: - Terms Note
    private var termsNote: some View {
-       Text("By creating an account, you agree to our\nTerms of Service and Privacy Policy.")
+        LText("register_terms")
            .font(.system(size: 11))
            .foregroundColor(.gray.opacity(0.7))
            .multilineTextAlignment(.center)
@@ -261,12 +286,14 @@ struct CreateAccountView: View {
    // MARK: - Footer Sign In Link
    private var footerLink: some View {
        HStack(spacing: 4) {
-           Text("Already have an account?")
-               .font(.system(size: 14))
-               .foregroundColor(.gray)
-            Button("Sign In") {
-                dismiss()
-            }
+            LText("register_have_account")
+                .font(.system(size: 14))
+                .foregroundColor(.gray)
+             Button {
+                 dismiss()
+             } label: {
+                 LText("register_sign_in")
+             }
            .font(.system(size: 14, weight: .semibold))
            .foregroundColor(MangoTheme.primaryOrange)
        }
@@ -292,9 +319,9 @@ struct CreateAccountView: View {
                ProgressView()
                    .progressViewStyle(CircularProgressViewStyle(tint: MangoTheme.primaryOrange))
                    .scaleEffect(1.4)
-               Text("Creating your account...")
-                   .font(.system(size: 14, weight: .medium))
-                   .foregroundColor(.secondary)
+                LText("register_creating")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(.secondary)
            }
            .padding(32)
            .background(
@@ -320,9 +347,9 @@ struct CreateAccountView: View {
                        .font(.system(size: 30, weight: .bold))
                        .foregroundColor(.white)
                }
-               Text("Account Created!")
-                   .font(.system(size: 18, weight: .bold, design: .rounded))
-               Text("Welcome to Mango 🥭")
+                LText("register_account_created")
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                LText("register_welcome_message")
                    .font(.system(size: 14))
                    .foregroundColor(.secondary)
            }

@@ -32,6 +32,10 @@ func main() throws {
 
     // Add Swift source files
     let sourceFiles = [
+        "DisasesClassificationApp/Constants/LocalizationManager.swift",
+        "DisasesClassificationApp/Constants/LocalizedStrings.swift",
+        "DisasesClassificationApp/Constants/LText.swift",
+        "DisasesClassificationApp/Home/View/SafariView.swift",
         "DisasesClassificationApp/DiseaseClassification/Model/ClassificationResult.swift",
         "DisasesClassificationApp/DiseaseClassification/Service/TFLiteService.swift",
         "DisasesClassificationApp/DiseaseClassification/Service/DiseaseReportService.swift",
@@ -39,6 +43,10 @@ func main() throws {
         "DisasesClassificationApp/DiseaseClassification/ViewModel/DiseaseClassificationViewModel.swift",
         "DisasesClassificationApp/DiseaseClassification/View/DiseaseClassificationView.swift",
         "DisasesClassificationApp/DiseaseClassification/View/CameraPreview.swift",
+        "DisasesClassificationApp/Authentication/View/ProfileView.swift",
+        "DisasesClassificationApp/Home/View/TutorialsView.swift",
+        "DisasesClassificationApp/Home/View/AboutView.swift",
+        "DisasesClassificationApp/Home/View/HelpView.swift",
     ]
 
     for file in sourceFiles {

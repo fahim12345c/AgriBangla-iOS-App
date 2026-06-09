@@ -21,7 +21,7 @@ struct PDFGenerator {
                     .font: UIFont.systemFont(ofSize: 8),
                     .foregroundColor: UIColor.lightGray
                 ]
-                let text = "AgriBD — Smart Farming Assistant  •  Page \(pageNum)"
+                let text = "Agri BD — Smart Farming Assistant  •  Page \(pageNum)"
                 let size = (text as NSString).size(withAttributes: attrs)
                 (text as NSString).draw(at: CGPoint(x: (pageW - size.width) / 2, y: pageH - footerH + 12), withAttributes: attrs)
             }
@@ -35,7 +35,7 @@ struct PDFGenerator {
                     .font: UIFont.boldSystemFont(ofSize: 20),
                     .foregroundColor: UIColor.white
                 ]
-                let title = "AgriBD"
+                let title = "Agri BD"
                 let titleSize = (title as NSString).size(withAttributes: titleAttrs)
                 (title as NSString).draw(at: CGPoint(x: (pageW - titleSize.width) / 2, y: 16), withAttributes: titleAttrs)
 
