@@ -47,6 +47,17 @@ func main() throws {
         "DisasesClassificationApp/Home/View/TutorialsView.swift",
         "DisasesClassificationApp/Home/View/AboutView.swift",
         "DisasesClassificationApp/Home/View/HelpView.swift",
+        "DisasesClassificationApp/AgriMarket/Model/MarketProduct.swift",
+        "DisasesClassificationApp/AgriMarket/Service/MarketService.swift",
+        "DisasesClassificationApp/AgriMarket/ViewModel/MarketViewModel.swift",
+        "DisasesClassificationApp/AgriMarket/ViewModel/SellViewModel.swift",
+        "DisasesClassificationApp/AgriMarket/View/AgriMarketView.swift",
+        "DisasesClassificationApp/AgriMarket/View/MarketBuyView.swift",
+        "DisasesClassificationApp/AgriMarket/View/MarketCartView.swift",
+        "DisasesClassificationApp/AgriMarket/View/MarketSellView.swift",
+        "DisasesClassificationApp/AgriMarket/View/MarketDepositView.swift",
+        "DisasesClassificationApp/AgriMarket/View/MarketCheckoutView.swift",
+        "DisasesClassificationApp/Home/View/SplashView.swift",
     ]
 
     for file in sourceFiles {

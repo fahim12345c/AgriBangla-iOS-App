@@ -11,7 +11,8 @@ class DrawerViewModel: ObservableObject {
     var topMenuItems: [DrawerMenuItem] {
         let lm = LocalizationManager.shared
         return [
-            DrawerMenuItem(icon: "person.2.fill", title: lm.localized("drawer_community"), isNew: true, destination: .community),
+            DrawerMenuItem(icon: "cart.fill", title: lm.localized("drawer_market"), isNew: true, destination: .market),
+            DrawerMenuItem(icon: "person.2.fill", title: lm.localized("drawer_community"), isNew: false, destination: .community),
             DrawerMenuItem(icon: "message.fill", title: lm.localized("drawer_chat"), isNew: false, destination: .chat),
             DrawerMenuItem(icon: "cloud.fill", title: lm.localized("drawer_weather"), isNew: false, destination: .weather),
             DrawerMenuItem(icon: "camera.viewfinder", title: lm.localized("drawer_disease_scanner"), isNew: false, destination: .diseaseScanner),
@@ -48,6 +49,7 @@ struct DrawerMenuItem: Identifiable {
 }
 
 enum DrawerDestination {
+    case market
     case community
     case chat
     case weather

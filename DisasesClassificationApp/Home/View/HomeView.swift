@@ -17,6 +17,7 @@ struct HomeView: View {
     var onCommunityTap: (() -> Void)? = nil
     var onWeatherTap: (() -> Void)? = nil
     var onChatTap: (() -> Void)? = nil
+    var onMarketTap: (() -> Void)? = nil
     var onProfileTap: (() -> Void)? = nil
     var onSearchTap: (() -> Void)? = nil
     var onNotificationTap: (() -> Void)? = nil
@@ -89,6 +90,7 @@ struct HomeView: View {
                         switch destination {
                         case .chat: onChatTap?()
                         case .weather: onWeatherTap?()
+                        case .market: onMarketTap?()
                         case .diseaseScanner: onDiseaseScannerTap?()
                         case .community: onCommunityTap?()
                         case .profile: showProfileSheet = true

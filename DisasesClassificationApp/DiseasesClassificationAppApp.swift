@@ -17,11 +17,10 @@ struct DiseasesClassificationAppApp: App {
     }
     var body: some Scene {
         WindowGroup {
-            CoordinatorView()
+            SplashView()
                 .onOpenURL { url in
-                                GIDSignIn.sharedInstance.handle(url)
+                    GIDSignIn.sharedInstance.handle(url)
                 }
-
         }
     }
 }

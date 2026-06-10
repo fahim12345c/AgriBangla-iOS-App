@@ -14,6 +14,7 @@ import SwiftUI
 // MARK: - Tab
 enum AppTab: Int, CaseIterable {
     case home
+    case market
     case weather
     case chat
     case community
@@ -23,6 +24,7 @@ enum AppTab: Int, CaseIterable {
         let lm = LocalizationManager.shared
         switch self {
         case .home:      return lm.localized("tab_home")
+        case .market:    return lm.localized("tab_market")
         case .weather:   return lm.localized("tab_weather")
         case .chat:      return lm.localized("tab_chat")
         case .community: return lm.localized("tab_community")
@@ -33,6 +35,7 @@ enum AppTab: Int, CaseIterable {
     var icon: String {
         switch self {
         case .home:      return "house.fill"
+        case .market:    return "cart.fill"
         case .weather:   return "cloud.sun.fill"
         case .chat:      return "message.fill"
         case .community: return "person.3.fill"
@@ -60,9 +63,13 @@ struct MainTabView: View {
                 onCommunityTap: { selectedTab = .community },
                 onWeatherTap: { selectedTab = .weather },
                 onChatTap: { selectedTab = .chat },
+                onMarketTap: { selectedTab = .market },
                 onProfileTap: nil
             )
             .tag(AppTab.home)
+
+            AgriMarketView()
+                .tag(AppTab.market)
 
             WeatherFeatureView(onBack: { selectedTab = .home })
                 .tag(AppTab.weather)
