@@ -20,7 +20,7 @@ final class ChatViewModel: ObservableObject {
         messages.append(
             ChatMessage(
                 role: .assistant,
-                content: "👋 সালাম! আমি আপনার কৃষি সহায়ক। ফসল, রোগ, আবহাওয়া বা সার সংক্রান্ত যেকোনো প্রশ্ন করতে পারেন। আমি বাংলায় সহজ করে বুঝিয়ে বলবো। 🌾",
+                content: "👋 Hello! I am your farming assistant. Ask me anything about crops, diseases, weather, or fertilizers. 🌾",
                 provider: .none
             )
         )
@@ -82,16 +82,16 @@ final class ChatViewModel: ObservableObject {
             case .httpError(let code, let msg):
                 text = "⚠️ \(providerName) Error \(code): \(msg)"
             case .noResponse:
-                text = "⚠️ দুঃখিত, কোনো উত্তর পাওয়া যায়নি। আবার চেষ্টা করুন।"
+                text = "⚠️ Sorry, no response received. Please try again."
             case .networkError(let e):
-                text = "⚠️ নেটওয়ার্ক সমস্যা: \(e.localizedDescription)"
+                text = "⚠️ Network error: \(e.localizedDescription)"
             case .invalidURL:
                 text = "⚠️ Invalid URL configuration."
             case .quotaExhausted:
-                text = "⚠️ সকল AI সার্ভারের কোটা শেষ। কিছুক্ষণ পরে আবার চেষ্টা করুন। 🙏"
+                text = "⚠️ All AI server quotas exhausted. Please try again later. 🙏"
             }
         } else {
-            text = "⚠️ অজানা সমস্যা: \(error.localizedDescription)"
+            text = "⚠️ Unknown error: \(error.localizedDescription)"
         }
 
         messages.append(ChatMessage(role: .assistant, content: text, provider: .none))

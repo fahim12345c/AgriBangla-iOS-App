@@ -52,8 +52,8 @@ struct TutorialsView: View {
             )
             stepCard(
                 icon: "message.fill",
-                title: "AI Chat (বাংলা)",
-                desc: "Ask any farming question in Bangla. The AI assistant responds in simple Bangla with emojis and practical advice. Powered by Gemini with DeepSeek fallback."
+                title: "AI Chat",
+                desc: "Ask any farming question. The AI assistant responds in simple English with emojis and practical advice. Powered by Gemini with DeepSeek fallback."
             )
             stepCard(
                 icon: "person.3.fill",
@@ -63,18 +63,14 @@ struct TutorialsView: View {
             stepCard(
                 icon: "camera.fill",
                 title: "Disease Scanner",
-                desc: "Take a photo of a diseased leaf or choose from your library. The app classifies 29 diseases across Mango, Potato, Rice, and Tomato. Tap 'Generate Advice Report' for a Bangla treatment report with medicine names. Download as PDF."
+                desc: "Take a photo of a diseased leaf or choose from your library. The app classifies 29 diseases across Mango, Potato, Rice, and Tomato. Tap 'Generate Advice Report' for a treatment report with medicine names. Download as PDF."
             )
             stepCard(
                 icon: "person.fill",
                 title: "Profile",
                 desc: "Tap your profile picture on the home screen or go to Profile from the drawer. Edit your name and update your photo."
             )
-            stepCard(
-                icon: "character.book.closed.fill",
-                title: "Language",
-                desc: "Go to Drawer → Change Language to switch between English and বাংলা. The entire app UI will update instantly."
-            )
+
         }
     }
 

@@ -1,19 +1,23 @@
 import SwiftUI
+import FirebaseAuth
 
 struct MarketBuyView: View {
     @ObservedObject var vm: MarketViewModel
-    @StateObject private var lm = LocalizationManager.shared
     @EnvironmentObject private var coordinator: Coordinator
     @State private var showAddToCartAlert = false
     @State private var selectedProduct: MarketProduct?
+    @State private var showReviewSheet = false
+    @State private var reviewProduct: MarketProduct?
+    @State private var reviewRating = 0
+    @State private var reviewComment = ""
 
     private let brandGreen = Color(red: 0.18, green: 0.55, blue: 0.34)
 
     private let categories: [(MarketProduct.MarketCategory, String, String)] = [
-        (.plant, "market_plants", "leaf.fill"),
-        (.medicine, "market_medicines", "pills.fill"),
-        (.fertilizer, "market_fertilizers", "drop.fill"),
-        (.equipment, "market_equipment", "wrench.adjustable.fill"),
+        (.plant, "Plants & Seeds", "leaf.fill"),
+        (.medicine, "Medicines", "pills.fill"),
+        (.fertilizer, "Fertilizers", "drop.fill"),
+        (.equipment, "Equipment", "wrench.adjustable.fill"),
     ]
 
     var body: some View {
@@ -29,22 +33,25 @@ struct MarketBuyView: View {
             .padding(.bottom, 40)
         }
         .refreshable { vm.loadProducts() }
-        .alert(lm.localized("market_add_to_cart_title"), isPresented: $showAddToCartAlert, presenting: selectedProduct) { product in
-            Button(lm.localized("general_yes")) {
+        .alert("Add to Cart", isPresented: $showAddToCartAlert, presenting: selectedProduct) { product in
+            Button("Yes") {
                 vm.addToCart(product: product)
                 selectedProduct = nil
             }
-            Button(lm.localized("general_no"), role: .cancel) {
+            Button("No", role: .cancel) {
                 selectedProduct = nil
             }
         } message: { product in
-            Text("\(lm.localized("market_add_to_cart_msg")) \(lm.currentLanguage == .bangla ? product.nameBN : product.name)?")
+            Text("\("Do you want to add") \(product.name)?")
+        }
+        .sheet(isPresented: $showReviewSheet) {
+            reviewSheet
         }
     }
 
     private var categoryGrid: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(lm.localized("market_categories"))
+            Text("Categories")
                 .font(.system(size: 17, weight: .bold, design: .rounded))
                 .foregroundColor(brandGreen)
 
@@ -66,7 +73,7 @@ struct MarketBuyView: View {
                     .background(Color(hex: category.color))
                     .clipShape(Circle())
 
-                Text(lm.localized(label))
+                Text(label)
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundColor(.primary)
 
@@ -89,12 +96,12 @@ struct MarketBuyView: View {
     private var productsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text(vm.selectedCategory.map { lm.localized(categoryLabel($0)) } ?? lm.localized("market_all_products"))
+                Text(vm.selectedCategory.map { categoryDisplayName($0) } ?? "All Products")
                     .font(.system(size: 17, weight: .bold, design: .rounded))
                     .foregroundColor(brandGreen)
                 Spacer()
                 if vm.selectedCategory != nil {
-                    Button(lm.localized("market_clear_filter")) {
+                    Button("Clear") {
                         vm.filterCategory(nil)
                     }
                     .font(.system(size: 13, weight: .medium))
@@ -113,7 +120,7 @@ struct MarketBuyView: View {
                     Image(systemName: "basket")
                         .font(.system(size: 40))
                         .foregroundColor(.secondary.opacity(0.5))
-                    Text(lm.localized("market_no_products"))
+                    Text("No products found")
                         .font(.system(size: 14))
                         .foregroundColor(.secondary)
                 }
@@ -139,13 +146,13 @@ struct MarketBuyView: View {
             }
 
             VStack(alignment: .leading, spacing: 3) {
-                Text(lm.currentLanguage == .bangla ? product.nameBN : product.name)
+                Text(product.name)
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundColor(.primary)
                 Text("৳\(String(format: "%.0f", product.price))")
                     .font(.system(size: 14, weight: .bold))
                     .foregroundColor(brandGreen)
-                Text(lm.currentLanguage == .bangla ? product.descriptionBN : product.description)
+                Text(product.description)
                     .font(.system(size: 11))
                     .foregroundColor(.secondary)
                     .lineLimit(2)
@@ -153,8 +160,23 @@ struct MarketBuyView: View {
 
             Spacer()
 
+            Button(action: {
+                reviewProduct = product
+                reviewRating = 0
+                reviewComment = ""
+                showReviewSheet = true
+            }) {
+                Image(systemName: "star.fill")
+                    .font(.system(size: 12))
+                    .foregroundColor(.yellow)
+                    .frame(width: 24, height: 24)
+                    .background(Color.yellow.opacity(0.15))
+                    .clipShape(RoundedRectangle(cornerRadius: 6))
+            }
+            .padding(.trailing, 4)
+
             if product.quantity == 0 {
-                Text(lm.localized("market_out_of_stock"))
+                Text("Out of Stock")
                     .font(.system(size: 9, weight: .bold))
                     .foregroundColor(.red)
                     .padding(.horizontal, 6)
@@ -202,18 +224,18 @@ struct MarketBuyView: View {
                 Image(systemName: "cart.fill")
                     .font(.system(size: 16))
                     .foregroundColor(brandGreen)
-                Text(lm.localized("market_your_cart"))
+                Text("Your Cart")
                     .font(.system(size: 16, weight: .bold, design: .rounded))
                     .foregroundColor(brandGreen)
                 Spacer()
-                Text("\(vm.cartCount) \(lm.localized("market_items"))")
+                Text("\(vm.cartCount) \("items")")
                     .font(.system(size: 13))
                     .foregroundColor(.secondary)
             }
 
             ForEach(vm.cartItems.prefix(3)) { item in
                 HStack {
-                    Text(lm.currentLanguage == .bangla ? item.productNameBN : item.productName)
+                    Text(item.productName)
                         .font(.system(size: 13))
                     Spacer()
                     Text("\(item.quantity)× ৳\(String(format: "%.0f", item.productPrice))")
@@ -225,7 +247,7 @@ struct MarketBuyView: View {
             if vm.cartItems.count > 3 {
                 HStack {
                     Spacer()
-                    Text("+\(vm.cartItems.count - 3) \(lm.localized("market_more_items"))")
+                    Text("+\(vm.cartItems.count - 3) \("more items")")
                         .font(.system(size: 12))
                         .foregroundColor(.secondary)
                 }
@@ -234,7 +256,7 @@ struct MarketBuyView: View {
             Divider()
 
             HStack {
-                Text(lm.localized("market_total"))
+                Text("Total:")
                     .font(.system(size: 14, weight: .semibold))
                 Spacer()
                 Text("৳\(String(format: "%.2f", vm.cartTotal))")
@@ -243,10 +265,9 @@ struct MarketBuyView: View {
             }
 
             Button(action: {
-                vm.loadCart()
                 coordinator.push(.marketCartView(viewModel: vm))
             }) {
-                Text(lm.localized("market_view_cart"))
+                Text("View Cart Details")
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
@@ -261,12 +282,87 @@ struct MarketBuyView: View {
         .shadow(color: .black.opacity(0.04), radius: 6, y: 2)
     }
 
-    private func categoryLabel(_ category: MarketProduct.MarketCategory) -> String {
+    private var reviewSheet: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    HStack {
+                        Text("Product")
+                        Spacer()
+                        Text(reviewProduct.map { $0.name } ?? "")
+                            .foregroundColor(.secondary)
+                    }
+                }
+
+                Section {
+                    HStack(spacing: 6) {
+                        ForEach(1...5, id: \.self) { i in
+                            Button(action: { reviewRating = i }) {
+                                Image(systemName: i <= reviewRating ? "star.fill" : "star")
+                                    .font(.system(size: 24))
+                                    .foregroundColor(.yellow)
+                            }
+                        }
+                    }
+                } header: {
+                    Text("Rating")
+                }
+
+                Section {
+                    TextField("Share your experience...", text: $reviewComment, axis: .vertical)
+                        .lineLimit(3...5)
+                } header: {
+                    Text("Comment")
+                }
+
+                Section {
+                    Button(action: submitReview) {
+                        Text("Submit Review")
+                            .frame(maxWidth: .infinity)
+                            .font(.system(size: 16, weight: .semibold))
+                    }
+                    .disabled(reviewRating == 0 || reviewComment.trimmingCharacters(in: .whitespaces).isEmpty)
+                }
+            }
+            .navigationTitle("Write a Review")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { showReviewSheet = false }
+                }
+            }
+        }
+        .presentationDetents([.medium, .large])
+    }
+
+    private func submitReview() {
+        guard let product = reviewProduct,
+              let uid = Auth.auth().currentUser?.uid else { return }
+        let displayName = Auth.auth().currentUser?.displayName ?? "Farmer"
+        Task {
+            do {
+                try await MarketReviewService.shared.addReview(
+                    productId: product.id,
+                    farmerId: uid,
+                    farmerName: displayName,
+                    rating: reviewRating,
+                    comment: reviewComment.trimmingCharacters(in: .whitespaces)
+                )
+                vm.toastMessage = "Thank you for your review!"
+                showReviewSheet = false
+            } catch {
+                vm.toastMessage = "Failed to submit review"
+                print("Review error: \(error)")
+            }
+        }
+    }
+
+    private func categoryDisplayName(_ category: MarketProduct.MarketCategory) -> String {
         switch category {
-        case .plant: return "market_plants"
-        case .medicine: return "market_medicines"
-        case .fertilizer: return "market_fertilizers"
-        case .equipment: return "market_equipment"
+        case .plant: return "Plants & Seeds"
+        case .medicine: return "Medicines"
+        case .fertilizer: return "Fertilizers"
+        case .equipment: return "Equipment"
         }
     }
 }

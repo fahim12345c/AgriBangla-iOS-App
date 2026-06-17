@@ -89,8 +89,8 @@ struct HelpView: View {
             faqItem(question: "Why is the weather not loading?",
                     answer: "Make sure location services are enabled. Pull down to refresh or tap the refresh button.")
 
-            faqItem(question: "How do I change the language?",
-                    answer: "Open the navigation drawer from the top-left menu, tap 'Change Language', and select English or বাংলা.")
+            faqItem(question: "How do I update my profile?",
+                    answer: "Tap your profile picture on the home screen or go to Profile from the drawer to edit your name and photo.")
 
             faqItem(question: "Can I use the app offline?",
                     answer: "Disease classification works offline (on-device AI). Weather, Chat, and Community require internet connection.")

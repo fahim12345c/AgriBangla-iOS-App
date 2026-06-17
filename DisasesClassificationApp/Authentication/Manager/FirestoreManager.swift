@@ -1,8 +1,3 @@
-//
-//  FirestoreManager.swift
-//  DisasesClassificationApp
-//
-
 import Foundation
 import FirebaseFirestore
 import FirebaseAuth
@@ -13,12 +8,13 @@ final class FirestoreManager {
 
     private init() {}
 
-    func createUserDocument(user: User, firstName: String, lastName: String, dateOfBirth: Date? = nil) async throws {
+    func createUserDocument(user: User, firstName: String, lastName: String, role: UserRole, dateOfBirth: Date? = nil) async throws {
         var userData: [String: Any] = [
             "id": user.uid,
             "email": user.email ?? "",
             "firstName": firstName,
             "lastName": lastName,
+            "role": role.rawValue,
             "createdAt": FieldValue.serverTimestamp()
         ]
         if let dob = dateOfBirth {
@@ -38,6 +34,8 @@ final class FirestoreManager {
             lastName: data["lastName"] as? String,
             profileImageURL: data["profileImageURL"] as? String,
             dateOfBirth: (data["dateOfBirth"] as? Timestamp)?.dateValue(),
+            role: UserRole(rawValue: data["role"] as? String ?? ""),
+            balance: data["balance"] as? Double ?? 0,
             createdAt: (data["createdAt"] as? Timestamp)?.dateValue() ?? Date()
         )
     }
@@ -46,5 +44,18 @@ final class FirestoreManager {
         try await db.collection("users").document(userId).setData([
             "profileImageURL": url
         ], merge: true)
+    }
+
+    // MARK: - Balance
+
+    func fetchUserBalance(userId: String) async throws -> Double {
+        let doc = try await db.collection("users").document(userId).getDocument()
+        return doc.data()?["balance"] as? Double ?? 0
+    }
+
+    func addUserBalance(userId: String, amount: Double) async throws {
+        try await db.collection("users").document(userId).updateData([
+            "balance": FieldValue.increment(amount)
+        ])
     }
 }

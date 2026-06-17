@@ -63,7 +63,8 @@ final class GoogleSignInManager {
         try await FirestoreManager.shared.createUserDocument(
             user: authResult.user,
             firstName: firstName,
-            lastName: lastName
+            lastName: lastName,
+            role: .farmer
         )
         
         return authResult.user

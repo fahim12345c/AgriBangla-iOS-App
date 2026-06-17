@@ -2,7 +2,6 @@ import SwiftUI
 
 struct MarketCartView: View {
     @ObservedObject var vm: MarketViewModel
-    @StateObject private var lm = LocalizationManager.shared
     @EnvironmentObject private var coordinator: Coordinator
 
     private let brandGreen = Color(red: 0.18, green: 0.55, blue: 0.34)
@@ -26,7 +25,7 @@ struct MarketCartView: View {
 
                     VStack(spacing: 12) {
                         HStack {
-                            Text(lm.localized("market_balance"))
+                            Text("Balance:")
                                 .font(.system(size: 14, weight: .medium))
                                 .foregroundColor(.secondary)
                             Spacer()
@@ -36,7 +35,7 @@ struct MarketCartView: View {
                         }
 
                         HStack {
-                            Text(lm.localized("market_total"))
+                            Text("Total:")
                                 .font(.system(size: 16, weight: .semibold))
                             Spacer()
                             Text("৳\(String(format: "%.2f", vm.cartTotal))")
@@ -47,7 +46,7 @@ struct MarketCartView: View {
                         Button(action: proceedToCheckout) {
                             HStack(spacing: 8) {
                                 Image(systemName: "shippingbox.fill")
-                                Text(lm.localized("market_checkout"))
+                                Text("Proceed to Checkout")
                             }
                             .font(.system(size: 15, weight: .semibold))
                             .foregroundColor(.white)
@@ -59,7 +58,7 @@ struct MarketCartView: View {
                         .disabled(!vm.canAffordCart)
 
                         if !vm.canAffordCart {
-                            Text(lm.localized("market_insufficient_balance"))
+                            Text("Insufficient balance. Please deposit first.")
                                 .font(.system(size: 12))
                                 .foregroundColor(.red)
                         }
@@ -67,7 +66,7 @@ struct MarketCartView: View {
                         Button(action: { vm.clearCart() }) {
                             HStack(spacing: 6) {
                                 Image(systemName: "trash")
-                                Text(lm.localized("market_clear_cart"))
+                                Text("Clear Cart")
                             }
                             .font(.system(size: 14, weight: .semibold))
                             .foregroundColor(.red)
@@ -82,7 +81,7 @@ struct MarketCartView: View {
                 }
             }
         }
-        .navigationTitle(lm.localized("market_cart"))
+        .navigationTitle("Shopping Cart")
         .navigationBarTitleDisplayMode(.inline)
     }
 
@@ -91,10 +90,10 @@ struct MarketCartView: View {
             Image(systemName: "cart")
                 .font(.system(size: 50))
                 .foregroundColor(.secondary.opacity(0.4))
-            Text(lm.localized("market_cart_empty"))
+            Text("Your cart is empty")
                 .font(.system(size: 16, weight: .medium))
                 .foregroundColor(.secondary)
-            Button(lm.localized("general_ok")) { coordinator.pop() }
+            Button("OK") { coordinator.pop() }
                 .font(.system(size: 15, weight: .semibold))
                 .foregroundColor(brandGreen)
                 .padding(.horizontal, 32)
@@ -116,7 +115,7 @@ struct MarketCartView: View {
             }
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(lm.currentLanguage == .bangla ? item.productNameBN : item.productName)
+                Text(item.productName)
                     .font(.system(size: 14, weight: .semibold))
                 Text("৳\(String(format: "%.0f", item.productPrice))")
                     .font(.system(size: 13, weight: .bold))

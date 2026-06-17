@@ -9,9 +9,7 @@ import SwiftUI
 
 struct DrawerView: View {
     @StateObject private var viewModel = DrawerViewModel()
-    @StateObject private var langManager = LocalizationManager.shared
     var onNavigate: ((DrawerDestination) -> Void)?
-    @State private var showLanguagePicker = false
 
     private let brandGreen = Color(red: 0.35, green: 0.69, blue: 0.46)
     private let textDark = Color(red: 0.1, green: 0.1, blue: 0.1)
@@ -76,7 +74,7 @@ struct DrawerView: View {
                                     .foregroundColor(.red)
                                     .frame(width: 30)
 
-                                Text(langManager.localized("drawer_logout"))
+                                Text("Logout")
                                     .font(.system(size: 16, weight: .semibold))
                                     .foregroundColor(.red)
 
@@ -93,25 +91,11 @@ struct DrawerView: View {
             }
         }
         .edgesIgnoringSafeArea(.top)
-        .confirmationDialog(langManager.localized("drawer_change_language"), isPresented: $showLanguagePicker) {
-            ForEach(LocalizationManager.Language.allCases, id: \.rawValue) { lang in
-                Button(lang.displayName) {
-                    langManager.setLanguage(lang)
-                }
-            }
-            Button(langManager.localized("general_cancel"), role: .cancel) { }
-        } message: {
-            Text(langManager.localized("drawer_change_language"))
-        }
     }
 
     private func menuItemRow(item: DrawerMenuItem) -> some View {
         Button(action: {
-            if item.destination == .changeLanguage {
-                showLanguagePicker = true
-            } else {
-                onNavigate?(item.destination)
-            }
+            onNavigate?(item.destination)
         }) {
             HStack(spacing: 20) {
                 Image(systemName: item.icon)

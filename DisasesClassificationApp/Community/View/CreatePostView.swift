@@ -3,7 +3,6 @@ import PhotosUI
 
 struct CreatePostView: View {
     @StateObject private var viewModel = CreatePostViewModel()
-    @StateObject private var lm = LocalizationManager.shared
     @Environment(\.dismiss) private var dismiss
     @State private var photoItem: PhotosPickerItem?
 
@@ -26,7 +25,7 @@ struct CreatePostView: View {
                     )
                     .overlay(alignment: .topLeading) {
                         if viewModel.text.isEmpty {
-                            LText("community_create_post")
+                            Text("Create Post")
                                 .font(.system(size: 16))
                                 .foregroundColor(.gray.opacity(0.5))
                                 .padding(.horizontal, 16)
@@ -75,11 +74,11 @@ struct CreatePostView: View {
             }
             .padding(16)
             .background(Color(red: 0.95, green: 0.97, blue: 0.95).ignoresSafeArea())
-            .navigationTitle(lm.localized("community_create_post"))
+            .navigationTitle("Create Post")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(lm.localized("community_cancel")) { dismiss() }
+                    Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
@@ -88,7 +87,7 @@ struct CreatePostView: View {
                         dismiss()
                         onCreatePost?(text, image)
                     } label: {
-                        LText("general_post")
+                        Text("Post")
                     }
                     .fontWeight(.semibold)
                     .disabled(!viewModel.isValid)

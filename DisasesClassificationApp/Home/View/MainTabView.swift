@@ -1,17 +1,6 @@
-//
-//  MainTabView.swift
-//  DisasesClassificationApp
-//
-//  Created by fahim on 6/5/26.
-//
-//
-//  MainTabView.swift
-//  Agri BD Dashboard
-//
-
 import SwiftUI
+import FirebaseAuth
 
-// MARK: - Tab
 enum AppTab: Int, CaseIterable {
     case home
     case market
@@ -21,14 +10,13 @@ enum AppTab: Int, CaseIterable {
     case diseases
 
     var title: String {
-        let lm = LocalizationManager.shared
         switch self {
-        case .home:      return lm.localized("tab_home")
-        case .market:    return lm.localized("tab_market")
-        case .weather:   return lm.localized("tab_weather")
-        case .chat:      return lm.localized("tab_chat")
-        case .community: return lm.localized("tab_community")
-        case .diseases:  return lm.localized("tab_diseases")
+        case .home:      return "Home"
+        case .market:    return "Market"
+        case .weather:   return "Weather"
+        case .chat:      return "Chat"
+        case .community: return "Community"
+        case .diseases:  return "Diseases"
         }
     }
 
@@ -44,18 +32,65 @@ enum AppTab: Int, CaseIterable {
     }
 }
 
-// MARK: - MainTabView
+enum SellerTab: Int, CaseIterable {
+    case dashboard
+    case market
+
+    var title: String {
+        switch self {
+        case .dashboard: return "Home"
+        case .market:    return "Market"
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .dashboard: return "house.fill"
+        case .market:    return "cart.fill"
+        }
+    }
+}
+
 struct MainTabView: View {
     @State private var selectedTab: AppTab = .home
-    @StateObject private var langManager = LocalizationManager.shared
+    @State private var selectedSellerTab: SellerTab = .dashboard
+    @State private var userRole: UserRole?
+    @State private var userName: String = "Farmer"
 
-    var userName: String = "Farmer"
-
-    var onDiseaseScannerTap: (() -> Void)? = nil
-    
     private let brandGreen = Color(red: 0.18, green: 0.55, blue: 0.34)
 
     var body: some View {
+        Group {
+            if let role = userRole {
+                if role == .seller {
+                    sellerBody
+                } else {
+                    farmerBody
+                }
+            } else {
+                loadingView
+            }
+        }
+        .task {
+            await loadUserRole()
+        }
+    }
+
+    private var loadingView: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "leaf.fill")
+                .font(.system(size: 48))
+                .foregroundColor(brandGreen)
+            ProgressView()
+                .tint(brandGreen)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(red: 0.95, green: 0.97, blue: 0.95).ignoresSafeArea())
+    }
+
+    // MARK: - Farmer Tabs
+
+    private var farmerBody: some View {
         TabView(selection: $selectedTab) {
             HomeView(
                 userName: userName,
@@ -83,64 +118,105 @@ struct MainTabView: View {
             DiseaseClassificationView()
                 .tag(AppTab.diseases)
         }
-        // Avoid .page style; it can break programmatic selection for custom tab bars.
         .tabViewStyle(.automatic)
         .safeAreaInset(edge: .bottom) {
-            customTabBar
+            farmerTabBar
         }
     }
 
-    // MARK: - Custom Tab Bar
-    private var customTabBar: some View {
+    // MARK: - Seller Tabs
+
+    private var sellerBody: some View {
+        TabView(selection: $selectedSellerTab) {
+            SellerHomeView()
+                .tag(SellerTab.dashboard)
+
+            AgriMarketView()
+                .tag(SellerTab.market)
+        }
+        .tabViewStyle(.automatic)
+        .safeAreaInset(edge: .bottom) {
+            sellerTabBar
+        }
+    }
+
+    // MARK: - Farmer Tab Bar
+
+    private var farmerTabBar: some View {
         HStack(spacing: 0) {
             ForEach(AppTab.allCases, id: \.rawValue) { tab in
                 Spacer()
-                tabBarItem(tab: tab)
+                tabBarItem(icon: tab.icon, title: tab.title, isSelected: selectedTab == tab) {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) { selectedTab = tab }
+                }
                 Spacer()
             }
         }
         .padding(.top, 10)
         .padding(.bottom, 10)
-        .background(
-            Color(.systemBackground)
-                .overlay(
-                    Rectangle()
-                        .fill(.black.opacity(0.06))
-                        .frame(height: 1),
-                    alignment: .top
-                )
-                .shadow(color: .black.opacity(0.10), radius: 18, x: 0, y: -6)
-        )
+        .background(tabBarBackground)
     }
 
-    private func tabBarItem(tab: AppTab) -> some View {
-        Button(action: {
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                selectedTab = tab
+    // MARK: - Seller Tab Bar
+
+    private var sellerTabBar: some View {
+        HStack(spacing: 0) {
+            ForEach(SellerTab.allCases, id: \.rawValue) { tab in
+                Spacer()
+                tabBarItem(icon: tab.icon, title: tab.title, isSelected: selectedSellerTab == tab) {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) { selectedSellerTab = tab }
+                }
+                Spacer()
             }
-        }) {
+        }
+        .padding(.top, 10)
+        .padding(.bottom, 10)
+        .background(tabBarBackground)
+    }
+
+    // MARK: - Shared
+
+    private var tabBarBackground: some View {
+        Color(.systemBackground)
+            .overlay(
+                Rectangle()
+                    .fill(.black.opacity(0.06))
+                    .frame(height: 1),
+                alignment: .top
+            )
+            .shadow(color: .black.opacity(0.10), radius: 18, x: 0, y: -6)
+    }
+
+    private func tabBarItem(icon: String, title: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
             VStack(spacing: 4) {
                 ZStack {
-                    if selectedTab == tab {
+                    if isSelected {
                         RoundedRectangle(cornerRadius: 12)
                             .fill(brandGreen.opacity(0.18))
                             .frame(width: 48, height: 32)
                     }
-                    Image(systemName: tab.icon)
-                        .font(.system(size: 20, weight: selectedTab == tab ? .bold : .regular))
-                        .foregroundColor(selectedTab == tab ? brandGreen : Color.gray.opacity(0.65))
+                    Image(systemName: icon)
+                        .font(.system(size: 20, weight: isSelected ? .bold : .regular))
+                        .foregroundColor(isSelected ? brandGreen : Color.gray.opacity(0.65))
                 }
-                Text(tab.title)
-                    .font(.system(size: 11, weight: selectedTab == tab ? .semibold : .regular))
-                    .foregroundColor(selectedTab == tab ? brandGreen : Color.gray.opacity(0.65))
+                Text(title)
+                    .font(.system(size: 11, weight: isSelected ? .semibold : .regular))
+                    .foregroundColor(isSelected ? brandGreen : Color.gray.opacity(0.65))
             }
         }
         .buttonStyle(.plain)
-        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: selectedTab)
+    }
+
+    private func loadUserRole() async {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        if let user = try? await FirestoreManager.shared.fetchUser(userId: uid) {
+            userRole = user.role ?? .farmer
+            userName = [user.firstName, user.lastName].compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: " ")
+        }
     }
 }
 
-// MARK: - Preview
 #Preview {
-    MainTabView(userName: "fahimalislam1919")
+    MainTabView()
 }

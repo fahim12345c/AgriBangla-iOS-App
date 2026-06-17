@@ -3,7 +3,6 @@ import SwiftUI
 struct ChatHomeView: View {
     @StateObject private var viewModel = ChatViewModel()
     @FocusState private var isInputFocused: Bool
-    @StateObject private var lm = LocalizationManager.shared
 
     private let brandGreen = Color(red: 0.18, green: 0.55, blue: 0.34)
     private let bgColor = Color(red: 0.95, green: 0.97, blue: 0.95)
@@ -29,7 +28,7 @@ struct ChatHomeView: View {
             Image(systemName: "leaf.fill")
                 .font(.title2)
                 .foregroundColor(brandGreen)
-            Text("কৃষি সহায়ক")
+            Text("Agri BD Assistant")
                 .font(.system(size: 20, weight: .bold, design: .rounded))
                 .foregroundColor(brandGreen)
         }
@@ -45,10 +44,10 @@ struct ChatHomeView: View {
             Image(systemName: "message.fill")
                 .font(.system(size: 56))
                 .foregroundColor(brandGreen.opacity(0.4))
-            Text("যেকোনো কৃষি প্রশ্ন করুন")
+            Text("Ask a Farming Question")
                 .font(.system(size: 18, weight: .semibold))
                 .foregroundColor(.gray)
-            Text("ফসল, রোগ, আবহাওয়া, সার\nসব বিষয়ে জানতে পারবেন")
+            Text("Crops, diseases, weather, fertilizers\nGet answers to all your farming questions")
                 .font(.system(size: 15))
                 .foregroundColor(.gray.opacity(0.7))
                 .multilineTextAlignment(.center)
@@ -110,7 +109,7 @@ struct ChatHomeView: View {
                         Image(systemName: "leaf.fill")
                             .font(.system(size: 12))
                             .foregroundColor(brandGreen)
-                        Text("কৃষি সহায়ক")
+                        Text("Agri BD Assistant")
                             .font(.system(size: 12, weight: .semibold))
                             .foregroundColor(brandGreen)
                     }
@@ -133,7 +132,7 @@ struct ChatHomeView: View {
             Image(systemName: "leaf.fill")
                 .font(.system(size: 12))
                 .foregroundColor(brandGreen)
-            Text("উত্তর আসছে...")
+            Text("Getting answer...")
                 .font(.system(size: 14))
                 .foregroundColor(.gray)
             ProgressView()
@@ -148,7 +147,7 @@ struct ChatHomeView: View {
         VStack(spacing: 0) {
             Divider()
             HStack(spacing: 10) {
-                TextField(lm.localized("chat_placeholder"), text: $viewModel.inputText)
+                TextField("Ask a question...", text: $viewModel.inputText)
                     .font(.system(size: 16))
                     .focused($isInputFocused)
                     .padding(.horizontal, 16)

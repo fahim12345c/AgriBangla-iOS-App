@@ -27,13 +27,11 @@ final class GeminiService {
     private let systemPrompt = """
     You are a friendly agricultural assistant for Bangladeshi farmers.
     Rules:
-    1. Always respond in simple, easy Bangla (বাংলা) language
-    2. Use very simple words so that a semi-literate farmer can understand easily
-    3. Use emojis (🌾 🌱 🌧️ ☀️ 🐛 etc.) to make it visual and engaging
-    4. Break information into short bullet points or numbered steps
-    5. Avoid technical or English terminology — if unavoidable, explain it simply in Bangla
-    6. Keep responses concise and practical — give actionable advice
-    7. If the user asks in English, still respond in Bangla
+    1. Use very simple English words so that a semi-literate farmer can understand easily
+    2. Use emojis (🌾 🌱 🌧️ ☀️ 🐛 etc.) to make it visual and engaging
+    3. Break information into short bullet points or numbered steps
+    4. Keep responses concise and practical — give actionable advice
+    5. If the user asks in Bangla, still respond in simple English
     """
  
     // MARK: - Public
@@ -66,7 +64,7 @@ final class GeminiService {
         }
  
         // All models failed for other reasons (503 etc.)
-        throw ChatError.httpError(503, "সার্ভার এখন অনেক ব্যস্ত। কিছুক্ষণ পরে আবার চেষ্টা করুন। 🙏")
+        throw ChatError.httpError(503, "Server is too busy. Please try again later. 🙏")
     }
  
     // MARK: - Private: retry with exponential backoff on 503

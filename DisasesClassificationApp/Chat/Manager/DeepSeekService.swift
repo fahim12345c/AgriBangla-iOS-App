@@ -29,13 +29,11 @@ final class DeepSeekService {
     private let systemPrompt = """
     You are a friendly agricultural assistant for Bangladeshi farmers.
     Rules:
-    1. Always respond in simple, easy Bangla (বাংলা) language
-    2. Use very simple words so that a semi-literate farmer can understand easily
-    3. Use emojis (🌾 🌱 🌧️ ☀️ 🐛 etc.) to make it visual and engaging
-    4. Break information into short bullet points or numbered steps
-    5. Avoid technical or English terminology — if unavoidable, explain it simply in Bangla
-    6. Keep responses concise and practical — give actionable advice
-    7. If the user asks in English, still respond in Bangla
+    1. Use very simple English words so that a semi-literate farmer can understand easily
+    2. Use emojis (🌾 🌱 🌧️ ☀️ 🐛 etc.) to make it visual and engaging
+    3. Break information into short bullet points or numbered steps
+    4. Keep responses concise and practical — give actionable advice
+    5. If the user asks in Bangla, still respond in simple English
     """
 
     // MARK: - Public
@@ -47,10 +45,10 @@ final class DeepSeekService {
             do {
                 return try await performRequest(userText, model: model)
             } catch ChatError.httpError(429, _) {
-                lastError = ChatError.httpError(429, "DeepSeek কোটা শেষ")
+                lastError = ChatError.httpError(429, "DeepSeek quota exhausted")
                 continue
             } catch ChatError.httpError(503, _) {
-                lastError = ChatError.httpError(503, "DeepSeek সার্ভার ব্যস্ত")
+                lastError = ChatError.httpError(503, "DeepSeek server busy")
                 continue
             } catch {
                 throw error

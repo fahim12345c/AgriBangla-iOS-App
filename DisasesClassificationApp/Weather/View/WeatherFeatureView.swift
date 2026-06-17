@@ -8,7 +8,6 @@ struct WeatherFeatureView: View {
     private let brandGreen = Color(red: 0.18, green: 0.55, blue: 0.34)
     @State private var isLegendPresented = false
     @State private var showBamisSheet = false
-    @StateObject private var lm = LocalizationManager.shared
     private let bamisURL = URL(string: "https://www.bamis.gov.bd")!
 
     var body: some View {
@@ -56,7 +55,7 @@ struct WeatherFeatureView: View {
             Spacer()
             ProgressView()
                 .scaleEffect(1.5)
-            LText("weather_loading")
+            Text("Fetching weather data...")
                 .font(.system(size: 16, weight: .medium))
                 .foregroundColor(.secondary)
             Spacer()
@@ -94,10 +93,10 @@ struct WeatherFeatureView: View {
             .accessibilityLabel("Back")
 
             VStack(alignment: .leading, spacing: 1) {
-                LText("weather_title")
+                Text("Weather")
                     .font(.system(size: 17, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
-                LText("weather_dashboard")
+                Text("Farmer Dashboard")
                     .font(.system(size: 11))
                     .foregroundStyle(.white.opacity(0.70))
             }
@@ -175,11 +174,11 @@ struct WeatherFeatureView: View {
 
             // Quick stats — only humidity, wind, rain
             HStack(spacing: 0) {
-                quickStat(icon: "humidity.fill",   value: vm.humidityText, label: "আর্দ্রতা\nHumidity", tint: .blue)
+                quickStat(icon: "humidity.fill",   value: vm.humidityText, label: "Humidity", tint: .blue)
                 Divider().frame(height: 36)
-                quickStat(icon: "wind",            value: vm.windText,     label: "বাতাস\nWind",         tint: .teal)
+                quickStat(icon: "wind",            value: vm.windText,     label: "Wind",     tint: .teal)
                 Divider().frame(height: 36)
-                quickStat(icon: "cloud.rain.fill", value: vm.rainText,     label: "বৃষ্টি\nRain",        tint: .indigo)
+                quickStat(icon: "cloud.rain.fill", value: vm.rainText,     label: "Rain",     tint: .indigo)
             }
             .padding(.vertical, 14)
         }
@@ -212,8 +211,8 @@ struct WeatherFeatureView: View {
     // MARK: - Mode Tabs
     private var modeTabs: some View {
         Picker("", selection: $vm.mode) {
-            LText("weather_spray_tab").tag(WeatherFeatureViewModel.Mode.spraying)
-            LText("weather_details_tab").tag(WeatherFeatureViewModel.Mode.details)
+            Text("Spray").tag(WeatherFeatureViewModel.Mode.spraying)
+            Text("Details").tag(WeatherFeatureViewModel.Mode.details)
         }
         .pickerStyle(.segmented)
     }
@@ -228,7 +227,7 @@ struct WeatherFeatureView: View {
 
     private var applicationTypeCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Label(lm.localized("spray_application_type"), systemImage: "drop.halffull")
+            Label("Application Type", systemImage: "drop.halffull")
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(.secondary)
 
@@ -282,7 +281,7 @@ struct WeatherFeatureView: View {
             // Status banner
             HStack(alignment: .center) {
                 VStack(alignment: .leading, spacing: 5) {
-                    LText("spray_window")
+                    Text("Spray Window")
                         .font(.system(size: 11, weight: .semibold))
                         .foregroundStyle(.secondary)
                         .kerning(0.3)
@@ -302,13 +301,13 @@ struct WeatherFeatureView: View {
             // Wind and Delta T — renamed simply
             HStack(spacing: 0) {
                 sprayMetric(
-                    label: "গরম-ঠান্ডা ফারাক\nHeat Gap",
+                    label: "Delta T",
                     value: "\(vm.assessment.deltaT.round1)°C",
                     color: .orange
                 )
                 Divider().frame(height: 40)
                 sprayMetric(
-                    label: "বাতাসের গতি\nWind Speed",
+                    label: "Wind Speed",
                     value: "\(vm.assessment.windKmh.round1) km/h",
                     color: .teal
                 )
@@ -361,7 +360,7 @@ struct WeatherFeatureView: View {
                 Image(systemName: "lightbulb.fill")
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(.orange)
-                LText("spray_advice")
+                Text("Advice")
                     .font(.system(size: 16, weight: .bold))
             }
 
@@ -387,21 +386,21 @@ struct WeatherFeatureView: View {
     // MARK: - Details Content
     private var detailsContent: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(lm.localized("weather_current_conditions"), icon: "thermometer.sun.fill")
+            sectionHeader("Current Conditions", icon: "thermometer.sun.fill")
 
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                DetailTile(titleKey: "weather_feels_like", value: vm.feelsLikeText, icon: "thermometer",   tint: .orange)
-                DetailTile(titleKey: "weather_humidity",    value: vm.humidityText,  icon: "humidity.fill", tint: .blue)
-                DetailTile(titleKey: "weather_wind",        value: vm.windText,      icon: "wind",          tint: .teal)
-                DetailTile(titleKey: "weather_pressure",    value: vm.pressureText,  icon: "gauge",         tint: .indigo)
+                DetailTile(titleKey: "Feels Like", value: vm.feelsLikeText, icon: "thermometer",   tint: .orange)
+                DetailTile(titleKey: "Humidity",    value: vm.humidityText,  icon: "humidity.fill", tint: .blue)
+                DetailTile(titleKey: "Wind",        value: vm.windText,      icon: "wind",          tint: .teal)
+                DetailTile(titleKey: "Pressure",    value: vm.pressureText,  icon: "gauge",         tint: .indigo)
             }
 
-            sectionHeader(lm.localized("weather_precipitation"), icon: "cloud.rain.fill")
+            sectionHeader("Precipitation", icon: "cloud.rain.fill")
                 .padding(.top, 4)
 
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                DetailTile(titleKey: "weather_rain_1h", value: vm.rainText,   icon: "cloud.rain.fill", tint: .blue)
-                DetailTile(titleKey: "weather_clouds",  value: vm.cloudsText, icon: "cloud.fill",      tint: .gray)
+                DetailTile(titleKey: "Rain (1h)", value: vm.rainText,   icon: "cloud.rain.fill", tint: .blue)
+                DetailTile(titleKey: "Clouds",  value: vm.cloudsText, icon: "cloud.fill",      tint: .gray)
             }
         }
         .padding(.top, 2)
@@ -421,9 +420,9 @@ struct WeatherFeatureView: View {
     // MARK: - Helpers
     private func farmerStatusLabel(_ status: SprayingWindowStatus) -> String {
         switch status {
-        case .optimal: return lm.localized("spray_optimal")
-        case .marginal: return lm.localized("spray_marginal")
-        case .poor:    return lm.localized("spray_poor")
+        case .optimal: return "Good to spray"
+        case .marginal: return "Spray carefully"
+        case .poor:    return "Do not spray now"
         }
     }
 
@@ -484,10 +483,10 @@ struct WeatherFeatureView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 3) {
-                    LText("weather_bamis_title")
+                    Text("BAMIS")
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundStyle(.primary)
-                    LText("weather_bamis_subtitle")
+                    Text("BAMIS Weather Info")
                         .font(.system(size: 11))
                         .foregroundStyle(.secondary)
                 }
@@ -533,7 +532,7 @@ private struct DetailTile: View {
                 )
 
             VStack(alignment: .leading, spacing: 3) {
-                LText(titleKey)
+                Text(titleKey)
                     .font(.system(size: 10, weight: .semibold))
                     .foregroundStyle(.secondary)
                     .lineLimit(2)

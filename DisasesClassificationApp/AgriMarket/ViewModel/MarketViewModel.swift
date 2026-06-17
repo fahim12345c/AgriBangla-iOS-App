@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import FirebaseAuth
 
 @MainActor
 final class MarketViewModel: ObservableObject {
@@ -10,9 +11,10 @@ final class MarketViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var showSellSuccess = false
     @Published var toastMessage: String?
-    @Published var cropListings: [CropListing] = []
+    @Published var currentUserRole: UserRole?
 
     private let marketService = MarketService.shared
+    private let firestoreManager = FirestoreManager.shared
 
     var cartTotal: Double {
         cartItems.reduce(0) { $0 + ($1.productPrice * Double($1.quantity)) }
@@ -30,19 +32,41 @@ final class MarketViewModel: ObservableObject {
         userBalance >= price
     }
 
+    // MARK: - User
+
+    func loadCurrentUser() async {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        do {
+            if let user = try await firestoreManager.fetchUser(userId: uid) {
+                currentUserRole = user.role
+                userBalance = user.balance
+            } else {
+                currentUserRole = .farmer
+            }
+        } catch {
+            print("Failed to load user: \(error)")
+            currentUserRole = .farmer
+        }
+    }
+
     // MARK: - Products
 
     func loadProducts() {
         isLoading = true
-        products = marketService.fetchProducts(category: selectedCategory)
-        isLoading = false
+        Task {
+            do {
+                products = try await marketService.fetchProducts(category: selectedCategory)
+            } catch {
+                toastMessage = "Failed to load products"
+                print("Fetch products error: \(error)")
+            }
+            isLoading = false
+        }
     }
 
     func filterCategory(_ category: MarketProduct.MarketCategory?) {
         selectedCategory = category
-        isLoading = true
-        products = marketService.fetchProducts(category: selectedCategory)
-        isLoading = false
+        loadProducts()
     }
 
     // MARK: - Cart
@@ -52,27 +76,74 @@ final class MarketViewModel: ObservableObject {
             toastMessage = "Sorry, this product is out of stock"
             return
         }
-        marketService.addToCart(product: product)
+        if let index = cartItems.firstIndex(where: { $0.productID == product.id }) {
+            let current = cartItems[index]
+            let newQty = current.quantity + 1
+            guard newQty <= product.quantity else {
+                toastMessage = "Only \(product.quantity) available in stock"
+                return
+            }
+            cartItems[index] = CartItem(
+                id: current.id,
+                productID: current.productID,
+                productName: current.productName,
+                productPrice: current.productPrice,
+                productIcon: current.productIcon,
+                category: current.category,
+                quantity: newQty,
+                sellerId: current.sellerId,
+                sellerName: current.sellerName,
+                addedAt: current.addedAt
+            )
+        } else {
+            guard 1 <= product.quantity else {
+                toastMessage = "Sorry, this product is out of stock"
+                return
+            }
+            let item = CartItem(
+                id: UUID().uuidString,
+                productID: product.id,
+                productName: product.name,
+                productPrice: product.price,
+                productIcon: product.iconName,
+                category: product.category.rawValue,
+                quantity: 1,
+                sellerId: product.sellerId,
+                sellerName: product.sellerName,
+                addedAt: Date()
+            )
+            cartItems.append(item)
+        }
         toastMessage = "\(product.name) added to cart"
-        loadCart()
     }
 
     func removeFromCart(cartItemID: String) {
-        marketService.removeFromCart(cartItemID: cartItemID)
-        loadCart()
+        cartItems.removeAll { $0.id == cartItemID }
     }
 
     func updateQuantity(cartItemID: String, quantity: Int) {
-        marketService.updateCartQuantity(cartItemID: cartItemID, quantity: quantity)
-        loadCart()
-    }
-
-    func loadCart() {
-        cartItems = marketService.fetchCart()
+        guard quantity > 0 else {
+            removeFromCart(cartItemID: cartItemID)
+            return
+        }
+        if let index = cartItems.firstIndex(where: { $0.id == cartItemID }) {
+            let current = cartItems[index]
+            cartItems[index] = CartItem(
+                id: current.id,
+                productID: current.productID,
+                productName: current.productName,
+                productPrice: current.productPrice,
+                productIcon: current.productIcon,
+                category: current.category,
+                quantity: quantity,
+                sellerId: current.sellerId,
+                sellerName: current.sellerName,
+                addedAt: current.addedAt
+            )
+        }
     }
 
     func clearCart() {
-        marketService.clearCart()
         cartItems = []
         toastMessage = "Cart cleared"
     }
@@ -80,54 +151,90 @@ final class MarketViewModel: ObservableObject {
     // MARK: - Balance
 
     func loadBalance() {
-        userBalance = marketService.userBalance
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        Task {
+            do {
+                userBalance = try await marketService.fetchBalance(userId: uid)
+            } catch {
+                print("Failed to load balance: \(error)")
+            }
+        }
     }
 
     func deposit(amount: Double) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
         guard amount > 0 else {
             toastMessage = "Enter a valid amount"
             return
         }
-        marketService.addBalance(amount: amount)
-        userBalance = marketService.userBalance
-        toastMessage = "৳\(String(format: "%.0f", amount)) deposited successfully"
+        Task {
+            do {
+                try await marketService.addBalance(userId: uid, amount: amount)
+                userBalance = try await marketService.fetchBalance(userId: uid)
+                toastMessage = "৳\(String(format: "%.0f", amount)) deposited successfully"
+            } catch {
+                toastMessage = "Deposit failed"
+                print("Deposit error: \(error)")
+            }
+        }
     }
 
-    // MARK: - Sell
+    // MARK: - Sell (Seller only)
 
-    func listCropForSale(cropName: String, cropNameBN: String, price: Double, quantity: String, quantityBN: String, description: String, descriptionBN: String, imageData: Data?) {
-        let listing = marketService.createCropListing(
-            cropName: cropName,
-            cropNameBN: cropNameBN,
-            price: price,
-            quantity: quantity,
-            quantityBN: quantityBN,
-            description: description,
-            descriptionBN: descriptionBN,
-            imageData: imageData
-        )
-        cropListings = marketService.cropListings
-        marketService.addBalance(amount: price)
-        userBalance = marketService.userBalance
-        showSellSuccess = true
+    func listProductForSale(name: String, price: Double, quantity: Int, category: MarketProduct.MarketCategory, description: String) {
+        guard let uid = Auth.auth().currentUser?.uid,
+              let displayName = Auth.auth().currentUser?.displayName else {
+            toastMessage = "User not logged in"
+            return
+        }
+        Task {
+            do {
+                let product = MarketProduct(
+                    name: name,
+                    price: price,
+                    quantity: quantity,
+                    category: category,
+                    iconName: category.sfSymbol,
+                    description: description,
+                    sellerId: uid,
+                    sellerName: displayName
+                )
+                try await marketService.addProduct(product)
+                showSellSuccess = true
+            } catch {
+                toastMessage = "Failed to list product: \(error.localizedDescription)"
+                print("List product error: \(error)")
+            }
+        }
     }
 
     // MARK: - Checkout
 
-    func placeOrder(address: DeliveryAddress) {
+    func placeOrder(address: DeliveryAddress) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw MarketError.notLoggedIn
+        }
         guard canAffordCart else {
-            toastMessage = "Insufficient balance to place order"
-            return
+            throw MarketError.insufficientBalance
         }
         guard !cartItems.isEmpty else {
-            toastMessage = "Cart is empty"
-            return
+            throw MarketError.emptyCart
         }
+
         let total = cartTotal
-        _ = marketService.reduceBalance(amount: total)
-        userBalance = marketService.userBalance
-        marketService.clearCart()
-        cartItems = []
+        let items = cartItems
+        let displayName = Auth.auth().currentUser?.displayName ?? "Farmer"
+
+        try await marketService.placeOrderAtomic(
+            farmerId: uid,
+            farmerName: displayName,
+            items: items,
+            address: address,
+            total: total
+        )
+
+        userBalance -= total
+        clearCart()
         loadProducts()
     }
 }

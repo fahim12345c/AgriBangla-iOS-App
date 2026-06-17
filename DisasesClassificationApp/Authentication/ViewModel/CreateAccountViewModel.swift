@@ -54,6 +54,7 @@ final class CreateAccountViewModel: ObservableObject, Identifiable {
     @Published var dateOfBirth: Date = Calendar.current.date(byAdding: .year, value: -18, to: Date()) ?? Date()
 
     // MARK: - Published UI State
+    @Published var selectedRole: UserRole = .farmer
     @Published var isPasswordVisible: Bool = false
     @Published var isConfirmPasswordVisible: Bool = false
     @Published var authState: AuthState = .idle
@@ -232,6 +233,7 @@ final class CreateAccountViewModel: ObservableObject, Identifiable {
                 user: result.user,
                 firstName: firstName.trimmingCharacters(in: .whitespaces),
                 lastName: lastName.trimmingCharacters(in: .whitespaces),
+                role: selectedRole,
                 dateOfBirth: dateOfBirth
             )
 

@@ -2,13 +2,16 @@ import SwiftUI
 
 struct MarketCheckoutView: View {
     @ObservedObject var vm: MarketViewModel
-    @StateObject private var lm = LocalizationManager.shared
     @EnvironmentObject private var coordinator: Coordinator
 
     @State private var street = ""
     @State private var city = ""
     @State private var district = ""
     @State private var phone = ""
+    @State private var isPlacingOrder = false
+    @State private var showSuccessAlert = false
+    @State private var showErrorAlert = false
+    @State private var errorAlertMessage = ""
 
     private let brandGreen = Color(red: 0.18, green: 0.55, blue: 0.34)
 
@@ -22,15 +25,25 @@ struct MarketCheckoutView: View {
             .padding(20)
         }
         .background(Color(red: 0.95, green: 0.97, blue: 0.95).ignoresSafeArea())
-        .navigationTitle(lm.localized("market_order_summary"))
+        .navigationTitle("Order Summary")
         .navigationBarTitleDisplayMode(.inline)
         .scrollDismissesKeyboard(.immediately)
+        .alert("Order Placed!", isPresented: $showSuccessAlert) {
+            Button("OK") { coordinator.popToRoot() }
+        } message: {
+            Text("Your order has been placed successfully. Balance has been updated.")
+        }
+        .alert("Order Failed", isPresented: $showErrorAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(errorAlertMessage)
+        }
     }
 
     private var orderSummary: some View {
         VStack(spacing: 12) {
             HStack {
-                Text(lm.localized("market_order_summary"))
+                Text("Order Summary")
                     .font(.system(size: 16, weight: .bold, design: .rounded))
                     .foregroundColor(brandGreen)
                 Spacer()
@@ -38,7 +51,7 @@ struct MarketCheckoutView: View {
 
             ForEach(vm.cartItems) { item in
                 HStack {
-                    Text(lm.currentLanguage == .bangla ? item.productNameBN : item.productName)
+                    Text(item.productName)
                         .font(.system(size: 14))
                     Spacer()
                     Text("\(item.quantity)× ৳\(String(format: "%.0f", item.productPrice))")
@@ -50,7 +63,7 @@ struct MarketCheckoutView: View {
             Divider()
 
             HStack {
-                Text(lm.localized("market_total"))
+                Text("Total:")
                     .font(.system(size: 15, weight: .semibold))
                 Spacer()
                 Text("৳\(String(format: "%.2f", vm.cartTotal))")
@@ -59,7 +72,7 @@ struct MarketCheckoutView: View {
             }
 
             HStack {
-                Text(lm.localized("market_balance"))
+                Text("Balance:")
                     .font(.system(size: 13))
                     .foregroundColor(.secondary)
                 Spacer()
@@ -76,14 +89,14 @@ struct MarketCheckoutView: View {
     private var addressForm: some View {
         VStack(spacing: 14) {
             HStack {
-                Text(lm.localized("market_delivery_address"))
+                Text("Delivery Address")
                     .font(.system(size: 16, weight: .bold, design: .rounded))
                     .foregroundColor(brandGreen)
                 Spacer()
             }
 
             VStack(alignment: .leading, spacing: 6) {
-                Text(lm.localized("market_address_street"))
+                Text("Street / Village")
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundColor(.secondary)
                 TextField("", text: $street)
@@ -95,7 +108,7 @@ struct MarketCheckoutView: View {
 
             HStack(spacing: 12) {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text(lm.localized("market_address_city"))
+                    Text("City / Town")
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundColor(.secondary)
                     TextField("", text: $city)
@@ -106,7 +119,7 @@ struct MarketCheckoutView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 6) {
-                    Text(lm.localized("market_address_district"))
+                    Text("District")
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundColor(.secondary)
                     TextField("", text: $district)
@@ -118,7 +131,7 @@ struct MarketCheckoutView: View {
             }
 
             VStack(alignment: .leading, spacing: 6) {
-                Text(lm.localized("market_address_phone"))
+                Text("Phone Number")
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundColor(.secondary)
                 TextField("", text: $phone)
@@ -136,15 +149,21 @@ struct MarketCheckoutView: View {
 
     private var placeOrderButton: some View {
         Button(action: placeOrder) {
-            Text(lm.localized("market_place_order"))
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .frame(height: 52)
-                .background(canPlaceOrder ? brandGreen : Color.gray.opacity(0.3))
-                .clipShape(RoundedRectangle(cornerRadius: 14))
+            HStack(spacing: 8) {
+                if isPlacingOrder {
+                    ProgressView()
+                        .tint(.white)
+                }
+                Text("Place Order")
+                    .font(.system(size: 16, weight: .semibold))
+            }
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .frame(height: 52)
+            .background(canPlaceOrder && !isPlacingOrder ? brandGreen : Color.gray.opacity(0.3))
+            .clipShape(RoundedRectangle(cornerRadius: 14))
         }
-        .disabled(!canPlaceOrder)
+        .disabled(!canPlaceOrder || isPlacingOrder)
     }
 
     private var canPlaceOrder: Bool {
@@ -156,13 +175,24 @@ struct MarketCheckoutView: View {
     }
 
     private func placeOrder() {
+        guard !isPlacingOrder else { return }
+        isPlacingOrder = true
         let address = DeliveryAddress(
             street: street.trimmingCharacters(in: .whitespaces),
             city: city.trimmingCharacters(in: .whitespaces),
             district: district.trimmingCharacters(in: .whitespaces),
             phone: phone.trimmingCharacters(in: .whitespaces)
         )
-        vm.placeOrder(address: address)
-        coordinator.push(.marketOrderConfirmation)
+        Task {
+            do {
+                try await vm.placeOrder(address: address)
+                isPlacingOrder = false
+                showSuccessAlert = true
+            } catch {
+                isPlacingOrder = false
+                errorAlertMessage = error.localizedDescription
+                showErrorAlert = true
+            }
+        }
     }
 }

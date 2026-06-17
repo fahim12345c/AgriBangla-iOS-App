@@ -2,9 +2,7 @@ import SwiftUI
 
 struct AgriMarketView: View {
     @StateObject private var vm = MarketViewModel()
-    @StateObject private var lm = LocalizationManager.shared
     @EnvironmentObject private var coordinator: Coordinator
-    @State private var selectedTab = 0
     @State private var showDepositAlert = false
     @State private var depositAmount = ""
 
@@ -12,39 +10,37 @@ struct AgriMarketView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            balanceBar
-
-            Picker("", selection: $selectedTab) {
-                Text(lm.localized("market_buy")).tag(0)
-                Text(lm.localized("market_sell")).tag(1)
-            }
-            .pickerStyle(.segmented)
-            .padding(.horizontal, 20)
-            .padding(.vertical, 12)
-
-            if selectedTab == 0 {
-                MarketBuyView(vm: vm)
+            if vm.currentUserRole == nil {
+                loadingView
             } else {
-                MarketSellView(vm: vm)
+                balanceBar
+                if vm.currentUserRole == .farmer {
+                    MarketBuyView(vm: vm)
+                } else {
+                    MarketSellView(vm: vm)
+                }
             }
         }
         .background(Color(red: 0.95, green: 0.97, blue: 0.95).ignoresSafeArea())
-        .navigationTitle(lm.localized("drawer_market"))
+        .navigationTitle("Agri Market")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                cartButton
+            if vm.currentUserRole == .farmer {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    cartButton
+                }
             }
         }
-        .onAppear {
-            vm.loadProducts()
-            vm.loadCart()
-            vm.loadBalance()
+        .task {
+            await vm.loadCurrentUser()
+            if vm.currentUserRole == .farmer {
+                vm.loadProducts()
+            }
         }
-        .alert(lm.localized("market_listing_submitted"), isPresented: $vm.showSellSuccess) {
-            Button(lm.localized("general_ok"), role: .cancel) { }
+        .alert("Listing Submitted!", isPresented: $vm.showSellSuccess) {
+            Button("OK", role: .cancel) { }
         } message: {
-            Text(lm.localized("market_listing_submitted_msg"))
+            Text("Your crop has been listed for sale.")
         }
         .overlay(alignment: .bottom) {
             if let msg = vm.toastMessage {
@@ -67,12 +63,23 @@ struct AgriMarketView: View {
         .animation(.spring(), value: vm.toastMessage != nil)
     }
 
+    private var loadingView: some View {
+        VStack(spacing: 12) {
+            ProgressView()
+                .tint(brandGreen)
+            Text("Loading...")
+                .font(.system(size: 14))
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
     private var balanceBar: some View {
         HStack {
             Image(systemName: "taka.sign.circle.fill")
                 .font(.system(size: 20))
                 .foregroundColor(brandGreen)
-            Text(lm.localized("market_balance"))
+            Text("Balance:")
                 .font(.system(size: 14, weight: .medium))
                 .foregroundColor(.secondary)
             Text("৳\(String(format: "%.2f", vm.userBalance))")
@@ -81,29 +88,28 @@ struct AgriMarketView: View {
 
             Spacer()
 
-            cartButton
-                .padding(.trailing, 8)
-
-            Button(action: { showDepositAlert = true }) {
-                Text("+\(lm.localized("market_deposit"))")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 6)
-                    .background(brandGreen)
-                    .clipShape(Capsule())
-            }
-            .alert(lm.localized("market_deposit"), isPresented: $showDepositAlert) {
-                TextField(lm.localized("market_deposit_amount"), text: $depositAmount)
-                    .keyboardType(.decimalPad)
-                Button(lm.localized("market_deposit_confirm")) {
-                    if let amount = Double(depositAmount), amount > 0 {
-                        vm.deposit(amount: amount)
-                    }
-                    depositAmount = ""
+            if vm.currentUserRole == .farmer {
+                Button(action: { showDepositAlert = true }) {
+                    Text("+\("Deposit")")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 6)
+                        .background(brandGreen)
+                        .clipShape(Capsule())
                 }
-                Button(lm.localized("general_cancel"), role: .cancel) {
-                    depositAmount = ""
+                .alert("Deposit", isPresented: $showDepositAlert) {
+                    TextField("Enter Amount", text: $depositAmount)
+                        .keyboardType(.decimalPad)
+                    Button("Deposit Now") {
+                        if let amount = Double(depositAmount), amount > 0 {
+                            vm.deposit(amount: amount)
+                        }
+                        depositAmount = ""
+                    }
+                    Button("Cancel", role: .cancel) {
+                        depositAmount = ""
+                    }
                 }
             }
         }
@@ -114,7 +120,6 @@ struct AgriMarketView: View {
 
     private var cartButton: some View {
         Button(action: {
-            vm.loadCart()
             coordinator.push(.marketCartView(viewModel: vm))
         }) {
             ZStack(alignment: .topTrailing) {

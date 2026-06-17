@@ -17,7 +17,6 @@ struct LoginView: View {
     @State private var headerScale: CGFloat = 0.85
     @State private var formOpacity: Double = 0
     @State private var formOffset: CGFloat = 30
-    @StateObject private var lm = LocalizationManager.shared
  
     var body: some View {
         GeometryReader { geometry in
@@ -72,9 +71,9 @@ struct LoginView: View {
             }
             .alert(item: alertItem) { item in
                 Alert(
-                    title: Text(lm.localized("login_failed")),
+                    title: Text("Login Failed"),
                     message: Text(item.message),
-                    dismissButton: .default(Text(lm.localized("general_ok"))) { viewModel.resetState() }
+                    dismissButton: .default(Text("OK")) { viewModel.resetState() }
                 )
             }
         }
@@ -101,11 +100,11 @@ struct LoginView: View {
                 }
                 .padding(.top, 28)
  
-                LText("login_welcome_back")
+                Text("Welcome Back")
                     .font(.system(size: 24, weight: .bold, design: .rounded))
                     .foregroundColor(.white)
 
-                LText("login_subtitle")
+                Text("Sign in to your Agri BD account")
                     .font(.system(size: 13, weight: .regular))
                     .foregroundColor(.white.opacity(0.85))
                     .padding(.bottom, 28)
@@ -120,7 +119,7 @@ struct LoginView: View {
  
             // Email Field
             MangoTextField(
-                placeholder: lm.localized("login_email"),
+                placeholder: "Email Address",
                 systemImage: "envelope",
                 text: $viewModel.email,
                 errorMessage: viewModel.emailError,
@@ -131,7 +130,7 @@ struct LoginView: View {
  
             // Password Field
             MangoTextField(
-                placeholder: lm.localized("login_password"),
+                placeholder: "Password",
                 systemImage: "lock",
                 text: $viewModel.password,
                 errorMessage: viewModel.passwordError,
@@ -185,7 +184,7 @@ struct LoginView: View {
                 }
                 .animation(.spring(response: 0.25), value: viewModel.rememberMe)
  
-                LText("login_remember_me")
+                Text("Remember me")
                     .font(.system(size: 13))
                     .foregroundColor(.secondary)
             }
@@ -197,14 +196,14 @@ struct LoginView: View {
         Button {
             viewModel.showForgotPasswordAlert = true
         } label: {
-            LText("login_forgot_password")
+            Text("Forgot Password?")
         }
-        .alert(lm.localized("login_reset_password"), isPresented: $viewModel.showForgotPasswordAlert) {
-            TextField(lm.localized("login_email"), text: $viewModel.forgotPasswordEmail)
-            Button(lm.localized("login_send_reset_link")) { viewModel.sendPasswordReset() }
-            Button(lm.localized("general_cancel"), role: .cancel) { }
+        .alert("Reset Password", isPresented: $viewModel.showForgotPasswordAlert) {
+            TextField("Email Address", text: $viewModel.forgotPasswordEmail)
+            Button("Send Reset Link") { viewModel.sendPasswordReset() }
+            Button("Cancel", role: .cancel) { }
         } message: {
-            Text(lm.localized("login_forgot_password_message"))
+            Text("Enter your email address to receive a password reset link.")
         }
         .font(.system(size: 13, weight: .semibold))
         .foregroundColor(MangoTheme.primaryOrange)
@@ -231,7 +230,7 @@ struct LoginView: View {
                         radius: 8, x: 0, y: 4
                     )
  
-                LText("login_sign_in")
+                Text("Sign In")
                     .font(.system(size: 16, weight: .semibold, design: .rounded))
                     .foregroundColor(viewModel.isFormValid ? .white : .gray)
             }
@@ -249,7 +248,7 @@ struct LoginView: View {
             Rectangle()
                 .fill(Color.gray.opacity(0.2))
                 .frame(height: 1)
-            LText("login_or_continue")
+            Text("or continue with")
                 .font(.system(size: 12))
                 .foregroundColor(.gray.opacity(0.7))
                 .fixedSize()
@@ -301,11 +300,11 @@ struct LoginView: View {
                         ProgressView()
                             .progressViewStyle(CircularProgressViewStyle(tint: MangoTheme.primaryOrange))
                             .scaleEffect(0.85)
-                        LText("login_signing_in_google")
+                        Text("Signing in with Google...")
                             .font(.system(size: 14, weight: .semibold))
                             .foregroundColor(.primary)
                     } else {
-                        LText("login_continue_google")
+                        Text("Continue with Google")
                             .font(.system(size: 14, weight: .semibold))
                             .foregroundColor(.primary)
                     }
@@ -353,13 +352,13 @@ struct LoginView: View {
     // MARK: - Footer
     private var footerLink: some View {
         HStack(spacing: 4) {
-            LText("login_no_account")
+            Text("Don't have an account?")
                 .font(.system(size: 14))
                 .foregroundColor(.gray)
             Button {
                 coordinator.push(.createAccountView(viewModel: CreateAccountViewModel(authManager: FirebaseAuthManager())))
             } label: {
-                LText("login_sign_up")
+                Text("Sign Up")
             }
             .font(.system(size: 14, weight: .semibold))
             .foregroundColor(MangoTheme.primaryOrange)
@@ -389,7 +388,7 @@ struct LoginView: View {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle(tint: MangoTheme.primaryOrange))
                     .scaleEffect(1.4)
-                LText("login_signing_in")
+                Text("Signing you in...")
                     .font(.system(size: 14, weight: .medium))
                     .foregroundColor(.secondary)
             }
@@ -416,9 +415,9 @@ struct LoginView: View {
                         .font(.system(size: 30, weight: .bold))
                         .foregroundColor(.white)
                 }
-                LText("login_welcome_back_success")
+                Text("Welcome Back!")
                     .font(.system(size: 18, weight: .bold, design: .rounded))
-                LText("login_signed_in_message")
+                Text("You're signed in to Agri BD")
                     .font(.system(size: 14))
                     .foregroundColor(.secondary)
             }

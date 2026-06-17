@@ -24,23 +24,22 @@ final class DiseaseReportService {
     private let deepSeekModels = ["deepseek-chat", "deepseek-v4-flash", "deepseek-v4-pro"]
 
     private let systemPrompt = """
-    You are a friendly agricultural assistant for Bangladeshi farmers. Generate a complete disease report in Bangla language.
+    You are a friendly agricultural assistant for Bangladeshi farmers. Generate a complete disease report in simple English.
 
     Rules:
-    1. ALWAYS respond in simple, easy Bangla (বাংলা) language only
-    2. Use very simple words so a semi-literate farmer can understand easily
-    3. Use emojis (🌾🌱🧑‍🌾💊🌿☀️💧🐛 etc.) to make it visual and engaging
-    4. The report MUST have these sections with Bangla headers:
-       🌿 রোগের নাম
-       📝 রোগ সম্পর্কে (সংক্ষিপ্ত বর্ণনা)
-       ⚠️ কারণ
-       🔍 লক্ষণ
-       ✅ করণীয় (কৃষকের জন্য পরামর্শ)
-       💊 সুপারিশকৃত ঔষধ
-       🛡️ প্রতিরোধ
-    5. Give specific medicine/pesticide/fungicide brand names available in Bangladesh
-    6. Keep advice practical, actionable, and budget-friendly
-    7. If the result is "Healthy", give tips to keep the plant healthy naturally
+    1. Use very simple English words so a semi-literate farmer can understand easily
+    2. Use emojis (🌾🌱🧑‍🌾💊🌿☀️💧🐛 etc.) to make it visual and engaging
+    3. The report MUST have these sections:
+       🌿 Disease Name
+       📝 About the Disease
+       ⚠️ Causes
+       🔍 Symptoms
+       ✅ What To Do
+       💊 Recommended Medicine
+       🛡️ Prevention
+    4. Give specific medicine/pesticide/fungicide brand names available in Bangladesh
+    5. Keep advice practical, actionable, and budget-friendly
+    6. If the result is "Healthy", give tips to keep the plant healthy naturally
     """
 
     func generateReport(diseaseName: String, confidence: Float) async throws -> String {
@@ -82,32 +81,32 @@ final class DiseaseReportService {
 
         if isHealthy {
             return """
-            My \(plant) plant is healthy (\(pct)% confidence). Give me tips in Bangla to keep it healthy.
+            My \(plant) plant is healthy (\(pct)% confidence). Give me tips to keep it healthy.
 
-            Generate a complete Bangla report with:
-            🌿 রোগের নাম — \(parts)
-            📝 রোগ সম্পর্কে
-            ⚠️ কারণ
-            🔍 লক্ষণ
-            ✅ করণীয়
-            💊 সুপারিশকৃত জৈব প্রতিকার
-            🛡️ প্রতিরোধ
+            Generate a report with:
+            🌿 Disease Name — \(parts)
+            📝 About the Disease
+            ⚠️ Causes
+            🔍 Symptoms
+            ✅ What To Do
+            💊 Recommended Organic Remedies
+            🛡️ Prevention
             """
         }
 
         return """
         My \(plant) plant has been diagnosed with: \(parts) (\(pct)% confidence).
 
-        Generate a complete Bangla disease report with these sections:
-        🌿 রোগের নাম — \(parts)
-        📝 রোগ সম্পর্কে
-        ⚠️ কারণ
-        🔍 লক্ষণ
-        ✅ করণীয়
-        💊 সুপারিশকৃত ঔষধ
-        🛡️ প্রতিরোধ
+        Generate a disease report with these sections:
+        🌿 Disease Name — \(parts)
+        📝 About the Disease
+        ⚠️ Causes
+        🔍 Symptoms
+        ✅ What To Do
+        💊 Recommended Medicine
+        🛡️ Prevention
 
-        Use simple Bangla. Add emojis. Give medicine brand names available in Bangladesh.
+        Use simple English. Add emojis. Give medicine brand names available in Bangladesh.
         """
     }
 

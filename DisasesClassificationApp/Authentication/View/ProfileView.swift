@@ -5,7 +5,6 @@ import FirebaseFirestore
 import UIKit
 
 struct ProfileView: View {
-    @StateObject private var lm = LocalizationManager.shared
     @State private var user: UserModel?
     @State private var firstName: String = ""
     @State private var lastName: String = ""
@@ -46,7 +45,7 @@ struct ProfileView: View {
                     }
                 }
             }
-            .navigationTitle(lm.localized("drawer_profile"))
+            .navigationTitle("Profile")
             .navigationBarTitleDisplayMode(.inline)
         }
         .onAppear(perform: loadUser)
@@ -65,12 +64,12 @@ struct ProfileView: View {
             photoItem = nil
         }
         .alert("Success", isPresented: $showSuccess) {
-            Button(lm.localized("general_ok"), role: .cancel) { }
+            Button("OK", role: .cancel) { }
         } message: {
             Text("Profile updated successfully.")
         }
         .alert("Error", isPresented: .constant(errorMessage != nil)) {
-            Button(lm.localized("general_ok"), role: .cancel) { errorMessage = nil }
+            Button("OK", role: .cancel) { errorMessage = nil }
         } message: {
             Text(errorMessage ?? "")
         }
@@ -208,7 +207,7 @@ struct ProfileView: View {
                 if isSaving {
                     ProgressView().tint(.white)
                 } else {
-                    LText("general_save")
+                    Text("Save")
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundColor(.white)
                 }

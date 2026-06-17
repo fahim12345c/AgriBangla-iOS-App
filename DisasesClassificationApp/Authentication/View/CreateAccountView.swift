@@ -16,7 +16,6 @@ struct CreateAccountView: View {
         @State private var headerScale: CGFloat = 0.85
         @State private var formOpacity: Double = 0
         @State private var formOffset: CGFloat = 30
-        @StateObject private var lm = LocalizationManager.shared
     var body: some View {
         
         ZStack {
@@ -80,7 +79,7 @@ struct CreateAccountView: View {
             }
         }
         .alert(item: alertItem) { item in
-            Alert(title: Text(lm.localized("register_error")), message: Text(item.message), dismissButton: .default(Text(lm.localized("general_ok"))) {
+            Alert(title: Text("Error"), message: Text(item.message), dismissButton: .default(Text("OK")) {
                 viewModel.resetState()
             })
         }
@@ -108,11 +107,11 @@ struct CreateAccountView: View {
                }
                .padding(.top, 28)
 
-                LText("register_join")
+                Text("Join Agri BD")
                     .font(.system(size: 24, weight: .bold, design: .rounded))
                     .foregroundColor(.white)
 
-                LText("register_subtitle")
+                Text("Create your account to get started")
                    .font(.system(size: 13, weight: .regular))
                    .foregroundColor(.white.opacity(0.85))
                    .padding(.bottom, 28)
@@ -127,7 +126,7 @@ struct CreateAccountView: View {
 
            // First Name
             MangoTextField(
-                placeholder: lm.localized("register_first_name"),
+                placeholder: "First Name",
                 systemImage: "person",
                 text: $viewModel.firstName,
                errorMessage: viewModel.firstNameError,
@@ -138,7 +137,7 @@ struct CreateAccountView: View {
 
            // Last Name
             MangoTextField(
-                placeholder: lm.localized("register_last_name"),
+                placeholder: "Last Name",
                 systemImage: "person",
                 text: $viewModel.lastName,
                errorMessage: viewModel.lastNameError,
@@ -149,7 +148,7 @@ struct CreateAccountView: View {
 
            // Email
             MangoTextField(
-                placeholder: lm.localized("register_email"),
+                placeholder: "Email Address",
                 systemImage: "envelope",
                 text: $viewModel.email,
                errorMessage: viewModel.emailError,
@@ -161,7 +160,7 @@ struct CreateAccountView: View {
            // Password
            VStack(alignment: .leading, spacing: 8) {
                 MangoTextField(
-                    placeholder: lm.localized("register_password"),
+                    placeholder: "Password",
                     systemImage: "lock",
                     text: $viewModel.password,
                     errorMessage: viewModel.passwordError,
@@ -182,7 +181,7 @@ struct CreateAccountView: View {
 
            // Confirm Password
             MangoTextField(
-                placeholder: lm.localized("register_confirm_password"),
+                placeholder: "Confirm Password",
                 systemImage: "lock",
                 text: $viewModel.confirmPassword,
                errorMessage: viewModel.confirmPasswordError,
@@ -196,7 +195,7 @@ struct CreateAccountView: View {
 
             // Date of Birth
             VStack(alignment: .leading, spacing: 6) {
-                LText("register_date_of_birth")
+                Text("Date of Birth")
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundColor(.gray)
                 DatePicker(
@@ -216,6 +215,18 @@ struct CreateAccountView: View {
                                 .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                         )
                 )
+            }
+
+            // Role Selection
+            VStack(alignment: .leading, spacing: 8) {
+                Text("I am a")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundColor(.gray)
+                Picker("", selection: $viewModel.selectedRole) {
+                    Text("Farmer").tag(UserRole.farmer)
+                    Text("Seller").tag(UserRole.seller)
+                }
+                .pickerStyle(.segmented)
             }
 
             // Create Account Button
@@ -260,7 +271,7 @@ struct CreateAccountView: View {
                                CircularProgressViewStyle(tint: .white)
                            )
                    } else {
-                        LText("register_create_account")
+                        Text("Create Account")
                             .font(.system(size: 16, weight: .semibold, design: .rounded))
                             .foregroundColor(
                                viewModel.isFormValid ? .white : .gray
@@ -277,7 +288,7 @@ struct CreateAccountView: View {
 
    // MARK: - Terms Note
    private var termsNote: some View {
-        LText("register_terms")
+        Text("By creating an account, you agree to our Terms of Service and Privacy Policy.")
            .font(.system(size: 11))
            .foregroundColor(.gray.opacity(0.7))
            .multilineTextAlignment(.center)
@@ -286,13 +297,13 @@ struct CreateAccountView: View {
    // MARK: - Footer Sign In Link
    private var footerLink: some View {
        HStack(spacing: 4) {
-            LText("register_have_account")
+            Text("Already have an account?")
                 .font(.system(size: 14))
                 .foregroundColor(.gray)
              Button {
                  dismiss()
              } label: {
-                 LText("register_sign_in")
+                 Text("Sign In")
              }
            .font(.system(size: 14, weight: .semibold))
            .foregroundColor(MangoTheme.primaryOrange)
@@ -319,7 +330,7 @@ struct CreateAccountView: View {
                ProgressView()
                    .progressViewStyle(CircularProgressViewStyle(tint: MangoTheme.primaryOrange))
                    .scaleEffect(1.4)
-                LText("register_creating")
+                Text("Creating your account...")
                     .font(.system(size: 14, weight: .medium))
                     .foregroundColor(.secondary)
            }
@@ -347,9 +358,9 @@ struct CreateAccountView: View {
                        .font(.system(size: 30, weight: .bold))
                        .foregroundColor(.white)
                }
-                LText("register_account_created")
+                Text("Account Created!")
                     .font(.system(size: 18, weight: .bold, design: .rounded))
-                LText("register_welcome_message")
+                Text("Welcome to Agri BD")
                    .font(.system(size: 14))
                    .foregroundColor(.secondary)
            }

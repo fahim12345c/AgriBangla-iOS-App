@@ -12,7 +12,6 @@ struct WeatherCardView: View {
     let state: WeatherLoadState
     let onRefresh: () -> Void
 
-    @StateObject private var lm = LocalizationManager.shared
     private let farmGreen = Color(red: 0.18, green: 0.49, blue: 0.20)
 
     var body: some View {
@@ -105,11 +104,11 @@ struct WeatherCardView: View {
 
                 // Stats row — only 3 things a farmer cares about
                 HStack {
-                    weatherStat(icon: "humidity.fill",   value: weather.humidity,  label: "আর্দ্রতা\nHumidity")
+                    weatherStat(icon: "humidity.fill",   value: weather.humidity,  label: "Humidity")
                     Spacer()
-                    weatherStat(icon: "wind",            value: weather.windSpeed, label: "বাতাস\nWind")
+                    weatherStat(icon: "wind",            value: weather.windSpeed, label: "Wind")
                     Spacer()
-                    weatherStat(icon: "cloud.rain.fill", value: weather.rain,      label: "বৃষ্টি\nRain")
+                    weatherStat(icon: "cloud.rain.fill", value: weather.rain,      label: "Rain")
                 }
             }
             .padding(20)
@@ -139,11 +138,11 @@ struct WeatherCardView: View {
         let digits = temperature.filter { $0.isNumber || $0 == "." }
         let temp = Double(digits) ?? 0
         if temp >= 38 {
-            return "⚠️ খুব গরম — সকালে বা বিকালে কাজ করুন\n⚠️ Very hot — work in morning or evening"
+            return "⚠️ Very hot — work in morning or evening"
         } else if temp >= 32 {
-            return "☀️ গরম দিন — পানি পান করুন\n☀️ Hot day — drink water often"
+            return "☀️ Hot day — drink water often"
         } else {
-            return "✅ কাজের জন্য ভালো আবহাওয়া\n✅ Good weather to work"
+            return "✅ Good weather to work"
         }
     }
 

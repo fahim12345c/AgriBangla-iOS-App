@@ -91,11 +91,11 @@ final class WeatherFeatureViewModel: ObservableObject {
     var farmerHeatAdvice: String {
         guard let feels = latestFeelsLikeC else { return "" }
         if feels >= 38 {
-            return "⚠️ খুব গরম — সকালে বা বিকালে কাজ করুন"
+            return "⚠️ Very hot — work in morning or evening"
         } else if feels >= 32 {
-            return "☀️ গরম দিন — পানি পান করুন"
+            return "☀️ Hot day — drink water often"
         } else {
-            return "✅ কাজের জন্য ভালো আবহাওয়া"
+            return "✅ Good weather to work"
         }
     }
 

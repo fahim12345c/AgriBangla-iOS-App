@@ -1,26 +1,28 @@
 import SwiftUI
-import PhotosUI
 
 struct MarketSellView: View {
     @ObservedObject var vm: MarketViewModel
-    @StateObject private var lm = LocalizationManager.shared
 
-    @State private var cropName = ""
-    @State private var cropNameBN = ""
+    @State private var productName = ""
     @State private var price = ""
-    @State private var quantity = ""
-    @State private var quantityBN = ""
+    @State private var quantityText = ""
     @State private var description = ""
-    @State private var descriptionBN = ""
-    @State private var selectedImage: PhotosPickerItem?
-    @State private var imageData: Data?
+    @State private var selectedCategory: MarketProduct.MarketCategory = .plant
 
     private let brandGreen = Color(red: 0.18, green: 0.55, blue: 0.34)
 
+    private let categories: [(MarketProduct.MarketCategory, String, String)] = [
+        (.plant, "Plants & Seeds", "leaf.fill"),
+        (.medicine, "Medicines", "pills.fill"),
+        (.fertilizer, "Fertilizers", "drop.fill"),
+        (.equipment, "Equipment", "wrench.adjustable.fill"),
+    ]
+
     var body: some View {
         ScrollView(showsIndicators: false) {
-            VStack(spacing: 16) {
-                photoSection
+            VStack(spacing: 20) {
+                headerSection
+                categorySection
                 formSection
                 submitButton
             }
@@ -29,57 +31,62 @@ struct MarketSellView: View {
         .scrollDismissesKeyboard(.immediately)
     }
 
-    private var photoSection: some View {
-        PhotosPicker(selection: $selectedImage, matching: .images) {
-            if let imageData, let uiImage = UIImage(data: imageData) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(height: 180)
-                    .frame(maxWidth: .infinity)
-                    .clipShape(RoundedRectangle(cornerRadius: 14))
-            } else {
-                RoundedRectangle(cornerRadius: 14)
-                    .fill(Color(.secondarySystemBackground))
-                    .frame(height: 140)
-                    .overlay {
+    private var headerSection: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("Add New Product")
+                .font(.system(size: 24, weight: .bold, design: .rounded))
+                .foregroundColor(brandGreen)
+            Text("Fill in the details below to list your product")
+                .font(.system(size: 13))
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var categorySection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Category")
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundColor(.secondary)
+
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+                ForEach(categories, id: \.0) { cat, label, icon in
+                    Button(action: { selectedCategory = cat }) {
                         VStack(spacing: 8) {
-                            Image(systemName: "camera.fill")
-                                .font(.system(size: 28))
-                                .foregroundColor(brandGreen.opacity(0.6))
-                            Text(lm.localized("market_add_photo"))
-                                .font(.system(size: 14, weight: .medium))
-                                .foregroundColor(.secondary)
+                            Image(systemName: icon)
+                                .font(.system(size: 24))
+                                .foregroundColor(.white)
+                                .frame(width: 44, height: 44)
+                                .background(Color(hex: cat.color))
+                                .clipShape(Circle())
+                            Text(label)
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundColor(.primary)
                         }
+                        .frame(maxWidth: .infinity)
+                        .padding(12)
+                        .background(selectedCategory == cat ? Color(hex: cat.color).opacity(0.1) : Color(.systemBackground))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(selectedCategory == cat ? Color(hex: cat.color) : Color.clear, lineWidth: 2)
+                        )
                     }
+                }
             }
         }
-        .onChange(of: selectedImage) { newItem in
-            Task {
-                guard let data = try? await newItem?.loadTransferable(type: Data.self) else { return }
-                imageData = data
-            }
-        }
+        .padding(16)
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 
     private var formSection: some View {
         VStack(spacing: 14) {
             VStack(alignment: .leading, spacing: 6) {
-                Text(lm.localized("market_crop_name"))
+                Text("Product Name")
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundColor(.secondary)
-                TextField("", text: $cropName)
-                    .font(.system(size: 15))
-                    .padding(12)
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-            }
-
-            VStack(alignment: .leading, spacing: 6) {
-                Text("\(lm.localized("market_crop_name")) (Bangla)")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundColor(.secondary)
-                TextField("", text: $cropNameBN)
+                TextField("e.g. Organic Rice", text: $productName)
                     .font(.system(size: 15))
                     .padding(12)
                     .background(Color(.secondarySystemBackground))
@@ -88,7 +95,7 @@ struct MarketSellView: View {
 
             HStack(spacing: 12) {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text(lm.localized("market_price"))
+                    Text("Price (৳)")
                         .font(.system(size: 13, weight: .semibold))
                         .foregroundColor(.secondary)
                     TextField("0", text: $price)
@@ -100,22 +107,12 @@ struct MarketSellView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 6) {
-                    Text(lm.localized("market_quantity"))
+                    Text("Quantity")
                         .font(.system(size: 13, weight: .semibold))
                         .foregroundColor(.secondary)
-                    TextField("", text: $quantity)
+                    TextField("0", text: $quantityText)
                         .font(.system(size: 15))
-                        .padding(12)
-                        .background(Color(.secondarySystemBackground))
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                }
-
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("\(lm.localized("market_quantity")) (BN)")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundColor(.secondary)
-                    TextField("", text: $quantityBN)
-                        .font(.system(size: 15))
+                        .keyboardType(.numberPad)
                         .padding(12)
                         .background(Color(.secondarySystemBackground))
                         .clipShape(RoundedRectangle(cornerRadius: 10))
@@ -123,75 +120,63 @@ struct MarketSellView: View {
             }
 
             VStack(alignment: .leading, spacing: 6) {
-                Text(lm.localized("market_description"))
+                Text("Description")
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundColor(.secondary)
-                TextField("", text: $description)
-                    .font(.system(size: 15))
-                    .padding(12)
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-            }
-
-            VStack(alignment: .leading, spacing: 6) {
-                Text("\(lm.localized("market_description")) (Bangla)")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundColor(.secondary)
-                TextField("", text: $descriptionBN)
+                TextField("Brief description of your product", text: $description)
                     .font(.system(size: 15))
                     .padding(12)
                     .background(Color(.secondarySystemBackground))
                     .clipShape(RoundedRectangle(cornerRadius: 10))
             }
         }
+        .padding(16)
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 
     private var submitButton: some View {
-        Button(action: submitListing) {
-            Text(lm.localized("market_list_crop"))
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .frame(height: 50)
-                .background(isFormValid ? brandGreen : Color.gray.opacity(0.3))
-                .clipShape(RoundedRectangle(cornerRadius: 14))
+        Button(action: submitProduct) {
+            HStack(spacing: 8) {
+                Image(systemName: "plus.circle.fill")
+                    .font(.system(size: 16))
+                Text("List Product")
+                    .font(.system(size: 16, weight: .semibold))
+            }
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .background(isFormValid ? brandGreen : Color.gray.opacity(0.3))
+            .clipShape(RoundedRectangle(cornerRadius: 14))
         }
         .disabled(!isFormValid)
         .padding(.top, 4)
     }
 
     private var isFormValid: Bool {
-        !cropName.trimmingCharacters(in: .whitespaces).isEmpty &&
-        !cropNameBN.trimmingCharacters(in: .whitespaces).isEmpty &&
+        !productName.trimmingCharacters(in: .whitespaces).isEmpty &&
         (Double(price) ?? 0) > 0 &&
-        !quantity.trimmingCharacters(in: .whitespaces).isEmpty &&
-        !quantityBN.trimmingCharacters(in: .whitespaces).isEmpty
+        (Int(quantityText) ?? 0) > 0
     }
 
-    private func submitListing() {
-        guard let priceVal = Double(price), priceVal > 0 else { return }
-        vm.listCropForSale(
-            cropName: cropName.trimmingCharacters(in: .whitespaces),
-            cropNameBN: cropNameBN.trimmingCharacters(in: .whitespaces),
+    private func submitProduct() {
+        guard let priceVal = Double(price), priceVal > 0,
+              let qty = Int(quantityText), qty > 0 else { return }
+        vm.listProductForSale(
+            name: productName.trimmingCharacters(in: .whitespaces),
             price: priceVal,
-            quantity: quantity.trimmingCharacters(in: .whitespaces),
-            quantityBN: quantityBN.trimmingCharacters(in: .whitespaces),
-            description: description.trimmingCharacters(in: .whitespaces),
-            descriptionBN: descriptionBN.trimmingCharacters(in: .whitespaces),
-            imageData: imageData
+            quantity: qty,
+            category: selectedCategory,
+            description: description.trimmingCharacters(in: .whitespaces)
         )
         resetForm()
     }
 
     private func resetForm() {
-        cropName = ""
-        cropNameBN = ""
+        productName = ""
         price = ""
-        quantity = ""
-        quantityBN = ""
+        quantityText = ""
         description = ""
-        descriptionBN = ""
-        imageData = nil
-        selectedImage = nil
+        selectedCategory = .plant
     }
 }

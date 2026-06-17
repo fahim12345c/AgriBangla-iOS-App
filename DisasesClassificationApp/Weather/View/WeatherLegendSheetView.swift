@@ -9,39 +9,39 @@ struct WeatherLegendSheetView: View {
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 14) {
                     LegendCard(
-                        title: "আর্দ্রতা · Humidity",
-                        descriptionText: "বাতাসে কতটুকু জলীয় বাষ্প আছে তার পরিমাণ।\nAmount of moisture in the air.",
-                        tip: "৪০–৯৫% হলে স্প্রে করুন। এর বাইরে হলে কীটনাশক ভালো কাজ করে না।\nBest for spraying: 40–95%. Outside this range spray won't work well.",
+                        title: "Humidity",
+                        descriptionText: "Amount of moisture in the air.",
+                        tip: "Best for spraying: 40–95%. Outside this range spray won't work well.",
                         tint: .blue
                     )
                     LegendCard(
-                        title: "বাতাস · Wind",
-                        descriptionText: "বাতাস কত জোরে বইছে।\nHow fast the wind is blowing.",
-                        tip: "৩–১৫ km/h হলে স্প্রে করুন। বেশি জোরে হলে কীটনাশক উড়ে যাবে। কম হলে ফসলে বসবে না।\nIdeal: 3–15 km/h. Too strong = spray drifts. Too calm = spray won't spread.",
+                        title: "Wind",
+                        descriptionText: "How fast the wind is blowing.",
+                        tip: "Ideal: 3–15 km/h. Too strong = spray drifts. Too calm = spray won't spread.",
                         tint: .teal
                     )
                     LegendCard(
-                        title: "বৃষ্টি · Rain",
-                        descriptionText: "গত ১ ঘণ্টায় কতটুকু বৃষ্টি হয়েছে।\nRain in the last 1 hour.",
-                        tip: "বৃষ্টি হলে স্প্রে করবেন না — কীটনাশক ধুয়ে যাবে।\nDo not spray if it is raining — chemicals will wash away.",
+                        title: "Rain",
+                        descriptionText: "Rain in the last 1 hour.",
+                        tip: "Do not spray if it is raining — chemicals will wash away.",
                         tint: .indigo
                     )
                     LegendCard(
-                        title: "গরম অনুভব · Feels Like",
-                        descriptionText: "শরীরে কতটা গরম লাগছে সেটার হিসাব।\nHow hot it actually feels on your body.",
-                        tip: "৩৮°C এর বেশি হলে সকালে বা বিকালে কাজ করুন। মাঝ দুপুরে বিশ্রাম নিন।\nAbove 38°C — work in morning or evening. Rest at midday.",
+                        title: "Feels Like",
+                        descriptionText: "How hot it actually feels on your body.",
+                        tip: "Above 38°C — work in morning or evening. Rest at midday.",
                         tint: .orange
                     )
                     LegendCard(
-                        title: "গরম-ঠান্ডা ফারাক · Delta T",
-                        descriptionText: "শুকনা ও ভেজা তাপমাত্রার পার্থক্য।\nDifference between dry and wet air temperature.",
-                        tip: "২–৮°C হলে সবচেয়ে ভালো। বেশি হলে কীটনাশক উড়ে যায়। কম হলে গাছে লাগে না।\nBest: 2–8°C. Higher = spray evaporates. Lower = runoff risk.",
+                        title: "Delta T",
+                        descriptionText: "Difference between dry and wet air temperature.",
+                        tip: "Best: 2–8°C. Higher = spray evaporates. Lower = runoff risk.",
                         tint: .red
                     )
                     LegendCard(
-                        title: "পাতার ভেজাভাব · Leaf Wetness",
-                        descriptionText: "ফসলের পাতায় পানি কতক্ষণ থাকছে।\nHow long water stays on crop leaves.",
-                        tip: "পাতা বেশিক্ষণ ভেজা থাকলে ছত্রাক রোগ হয় (ব্লাইট, মিলডিউ)।\nLong wetness causes fungal disease (blight, mildew).",
+                        title: "Leaf Wetness",
+                        descriptionText: "How long water stays on crop leaves.",
+                        tip: "Long wetness causes fungal disease (blight, mildew).",
                         tint: .green
                     )
                 }
@@ -56,7 +56,7 @@ struct WeatherLegendSheetView: View {
         HStack(spacing: 12) {
             Image(systemName: "book.fill")
                 .foregroundStyle(.white)
-            Text("আবহাওয়ার ব্যাখ্যা · Weather Guide")
+            Text("Weather Guide")
                 .font(.system(size: 17, weight: .bold, design: .rounded))
                 .foregroundStyle(.white)
             Spacer()

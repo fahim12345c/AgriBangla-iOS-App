@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct MarketOrderConfirmationView: View {
-    @StateObject private var lm = LocalizationManager.shared
     @EnvironmentObject private var coordinator: Coordinator
 
     private let brandGreen = Color(red: 0.18, green: 0.55, blue: 0.34)
@@ -14,11 +13,11 @@ struct MarketOrderConfirmationView: View {
                 .font(.system(size: 72))
                 .foregroundColor(brandGreen)
 
-            Text(lm.localized("market_order_placed"))
+            Text("Order Placed!")
                 .font(.system(size: 22, weight: .bold, design: .rounded))
                 .foregroundColor(brandGreen)
 
-            Text(lm.localized("market_order_placed_msg"))
+            Text("Your order has been placed successfully. Balance has been updated.")
                 .font(.system(size: 15))
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -27,7 +26,7 @@ struct MarketOrderConfirmationView: View {
             Spacer()
 
             Button(action: { coordinator.popToRoot() }) {
-                Text(lm.localized("general_ok"))
+                Text("OK")
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)

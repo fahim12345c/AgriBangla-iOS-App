@@ -35,7 +35,6 @@ struct HomeView: View {
     @State private var showTutorialsSheet = false
     @State private var showAboutSheet = false
     @State private var showHelpSheet = false
-    @StateObject private var lm = LocalizationManager.shared
     private let newsURL = URL(string: "https://www.bssnews.net/bangla/national/agriculture-news")!
 
     // Brand green — defined inline so no asset needed
@@ -98,7 +97,6 @@ struct HomeView: View {
                         case .tutorials: showTutorialsSheet = true
                         case .about: showAboutSheet = true
                         case .help: showHelpSheet = true
-                        case .changeLanguage: break
                         }
                     })
                         .frame(width: UIScreen.main.bounds.width * 0.75)
@@ -155,8 +153,8 @@ struct HomeView: View {
                 showUploadError = true
             }
         }
-        .alert(lm.localized("upload_failed"), isPresented: $showUploadError) {
-            Button(lm.localized("general_ok"), role: .cancel) {
+        .alert("Upload Failed", isPresented: $showUploadError) {
+            Button("OK", role: .cancel) {
                 viewModel.profileUploadError = nil
             }
         } message: {
@@ -213,7 +211,7 @@ struct HomeView: View {
                 HStack(spacing: 5) {
                     Image(systemName: "magnifyingglass")
                         .font(.system(size: 13, weight: .semibold))
-                    Text(lm.localized("home_search"))
+                    Text("Search")
                         .font(.system(size: 13, weight: .medium))
                 }
                 .foregroundColor(.white)
@@ -247,7 +245,7 @@ struct HomeView: View {
     private var welcomeSection: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                LText("home_welcome")
+                Text("Welcome")
                     .font(.system(size: 13, weight: .medium))
                     .foregroundColor(.gray)
                 Text(viewModel.userName.isEmpty ? "User" : viewModel.userName)
@@ -312,7 +310,7 @@ struct HomeView: View {
     // MARK: - Weather Section
     private var weatherSection: some View {
         VStack(alignment: .leading, spacing: 10) {
-            sectionHeader(title: lm.localized("home_weather_conditions"), icon: "cloud.sun.fill")
+            sectionHeader(title: "Weather Conditions", icon: "cloud.sun.fill")
                 .onTapGesture { onWeatherTap?() }
             WeatherCardView(
                 locationTitle: viewModel.locationTitle,
@@ -326,7 +324,7 @@ struct HomeView: View {
     // MARK: - Feature Grid Section
     private var featureGridSection: some View {
         VStack(alignment: .leading, spacing: 10) {
-            sectionHeader(title: lm.localized("home_smart_support"), icon: "sparkles")
+            sectionHeader(title: "Agri BD Smart Support", icon: "sparkles")
             LazyVGrid(
                 columns: [GridItem(.flexible(), spacing: 14), GridItem(.flexible(), spacing: 14)],
                 spacing: 14

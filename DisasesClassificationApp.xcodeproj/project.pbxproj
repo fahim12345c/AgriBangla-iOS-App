@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		067FA2E6C92C45F9BD87E97E /* LText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C6548B5764A53E005542B95 /* LText.swift */; };
 		3197B780FB76C35772013310 /* TutorialsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC900A4784FF38B952CBF18C /* TutorialsView.swift */; };
-		42BFC41B2EDB915116D3E46F /* LocalizationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7F582264B73DB36AEF67D5 /* LocalizationManager.swift */; };
 		4B630ACE002788A11E7C0E42 /* TensorFlowLiteC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8453E5F4A775D06C84B96299 /* TensorFlowLiteC.xcframework */; };
 		5B755B1CDFB4E1366F9B47EE /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73C490F4E978677F9FEDD8F9 /* SafariView.swift */; };
 		60D372E8069D9CEC8D469537 /* MarketCartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DACA633C5A140314DB0AC9A /* MarketCartView.swift */; };
@@ -57,7 +55,6 @@
 		DD5FEB9B2FD51498008835A0 /* Cloudinary in Frameworks */ = {isa = PBXBuildFile; productRef = 297DD4EAC79F869FF9B8F0C3 /* Cloudinary */; };
 		DD5FEB9D2FD59248008835A0 /* plantDiseaseModel.tflite in Resources */ = {isa = PBXBuildFile; fileRef = DD5FEB9C2FD59247008835A0 /* plantDiseaseModel.tflite */; };
 		DD5FEB9F2FD59257008835A0 /* lables.txt in Resources */ = {isa = PBXBuildFile; fileRef = DD5FEB9E2FD59257008835A0 /* lables.txt */; };
-		DD73AC09F310F256028AEEDE /* LocalizedStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD2CFEA03CF2A2FB96AADB9 /* LocalizedStrings.swift */; };
 		DD8A31E52FBDFE010047776D /* DrawerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8A31E42FBDFE010047776D /* DrawerView.swift */; };
 		DD8A31E72FBDFE4E0047776D /* MenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8A31E62FBDFE4E0047776D /* MenuItem.swift */; };
 		DD8E72372FA8D5050005D254 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD8E72332FA8D5050005D254 /* Assets.xcassets */; };
@@ -102,13 +99,18 @@
 		DDBAF9232FD4093900460D18 /* CommunityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBAF9222FD4093900460D18 /* CommunityViewModel.swift */; };
 		DD0000010000000000000001 /* MarketSellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000020000000000000002 /* MarketSellView.swift */; };
 		E163611F43F9B34265BC46E2 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0422087AB7FA8E0B46D6793A /* SplashView.swift */; };
+		8EDC96D7D7DE463F8F0FBFD8 /* MarketReviewService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2294904572B4E00B44F6555 /* MarketReviewService.swift */; };
+		C324852CDB644740AF4FE481 /* SellerHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AB63DDA70C4BBEBF1E4D56 /* SellerHomeView.swift */; };
+		EB39695B16544E2093084323 /* SellerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2710260E3DCA488D8AF91923 /* SellerViewModel.swift */; };
+		076E19D487484DBEA2E6967F /* SellerOrderListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SellerOrderListView.swift; };
+		CF910FDEC4AA42869E54F96B /* SellerOrderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SellerOrderDetailView.swift; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0422087AB7FA8E0B46D6793A /* SplashView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; name = SplashView.swift; path = DisasesClassificationApp/Home/View/SplashView.swift; sourceTree = "<group>"; };
 		0C6548B5764A53E005542B95 /* LText.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; name = LText.swift; path = DisasesClassificationApp/Constants/LText.swift; sourceTree = "<group>"; };
 		172D3A9A94A4753F1ED16C62 /* MarketViewModel.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; name = MarketViewModel.swift; path = DisasesClassificationApp/AgriMarket/ViewModel/MarketViewModel.swift; sourceTree = "<group>"; };
-		18E0C161CBF29A1FA3167F7A /* HelpView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; name = HelpView.swift; path = DisasesClassificationApp/Home/View/HelpView.swift; sourceTree = "<group>"; };
+		18E0C161CBF29A1FA3167F7A /* HelpView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; name = HelpView.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		1978E4D0E1FBCAB29BB9945B /* AgriMarketView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; name = AgriMarketView.swift; path = DisasesClassificationApp/AgriMarket/View/AgriMarketView.swift; sourceTree = "<group>"; };
 		3E7F582264B73DB36AEF67D5 /* LocalizationManager.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; name = LocalizationManager.swift; path = DisasesClassificationApp/Constants/LocalizationManager.swift; sourceTree = "<group>"; };
 		4C643F2E3FECBCA2C4E02406 /* MarketBuyView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; name = MarketBuyView.swift; path = DisasesClassificationApp/AgriMarket/View/MarketBuyView.swift; sourceTree = "<group>"; };
@@ -180,12 +182,17 @@
 		DDBAF91E2FD4091700460D18 /* ImageUploadService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploadService.swift; sourceTree = "<group>"; };
 		DDBAF9202FD4092300460D18 /* PostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailView.swift; sourceTree = "<group>"; };
 		DDBAF9222FD4093900460D18 /* CommunityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityViewModel.swift; sourceTree = "<group>"; };
-		DE172061F95F0FDFEF9B6484 /* AboutView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; name = AboutView.swift; path = DisasesClassificationApp/Home/View/AboutView.swift; sourceTree = "<group>"; };
+		DE172061F95F0FDFEF9B6484 /* AboutView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; name = AboutView.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		E60E9A1D52BAFB991DA03D40 /* ProfileView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; name = ProfileView.swift; path = DisasesClassificationApp/Authentication/View/ProfileView.swift; sourceTree = "<group>"; };
 		DD0000020000000000000002 /* MarketSellView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; name = MarketSellView.swift; path = DisasesClassificationApp/AgriMarket/View/MarketSellView.swift; sourceTree = "<group>"; };
 		DD0000050000000000000005 /* MarketCheckoutView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; name = MarketCheckoutView.swift; path = DisasesClassificationApp/AgriMarket/View/MarketCheckoutView.swift; sourceTree = "<group>"; };
 		DD0000070000000000000007 /* MarketOrderConfirmationView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; name = MarketOrderConfirmationView.swift; path = DisasesClassificationApp/AgriMarket/View/MarketOrderConfirmationView.swift; sourceTree = "<group>"; };
-		FC900A4784FF38B952CBF18C /* TutorialsView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; name = TutorialsView.swift; path = DisasesClassificationApp/Home/View/TutorialsView.swift; sourceTree = "<group>"; };
+		FC900A4784FF38B952CBF18C /* TutorialsView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; name = TutorialsView.swift; path = TutorialsView.swift; sourceTree = "<group>"; };
+		D2294904572B4E00B44F6555 /* MarketReviewService.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; name = MarketReviewService.swift; path = DisasesClassificationApp/AgriMarket/Service/MarketReviewService.swift; sourceTree = "<group>"; };
+		F9AB63DDA70C4BBEBF1E4D56 /* SellerHomeView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; name = SellerHomeView.swift; path = SellerHomeView.swift; sourceTree = "<group>"; };
+		2710260E3DCA488D8AF91923 /* SellerViewModel.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; name = SellerViewModel.swift; path = SellerViewModel.swift; sourceTree = "<group>"; };
+		SellerOrderListView.swift /* SellerOrderListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Seller/View/SellerOrderListView.swift"; sourceTree = "<group>"; };
+		SellerOrderDetailView.swift /* SellerOrderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Seller/View/SellerOrderDetailView.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -211,6 +218,9 @@
 				DDB045D02FA9BF56002EA282 /* GoogleSignIn in Frameworks */,
 				88FA14FB95B5E0FF38BFFCB9 /* FirebaseFirestore in Frameworks */,
 				4B630ACE002788A11E7C0E42 /* TensorFlowLiteC.xcframework in Frameworks */,
+				8EDC96D7D7DE463F8F0FBFD8 /* MarketReviewService.swift in Sources */,
+				C324852CDB644740AF4FE481 /* SellerHomeView.swift in Sources */,
+				EB39695B16544E2093084323 /* SellerViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,15 +330,10 @@
 				DD3B52FA2FD6C9D6004DA5FE /* DisasesClassificationApp/DiseaseClassification/ViewModel/DiseaseClassificationViewModel.swift */,
 				DD3B52FC2FD6CA29004DA5FE /* DisasesClassificationApp/DiseaseClassification/View/DiseaseClassificationView.swift */,
 				DD3B52FE2FD6CA3A004DA5FE /* DisasesClassificationApp/DiseaseClassification/View/CameraPreview.swift */,
-				3E7F582264B73DB36AEF67D5 /* LocalizationManager.swift */,
-				9FD2CFEA03CF2A2FB96AADB9 /* LocalizedStrings.swift */,
-				0C6548B5764A53E005542B95 /* LText.swift */,
 				E60E9A1D52BAFB991DA03D40 /* ProfileView.swift */,
-				FC900A4784FF38B952CBF18C /* TutorialsView.swift */,
-				DE172061F95F0FDFEF9B6484 /* AboutView.swift */,
-				18E0C161CBF29A1FA3167F7A /* HelpView.swift */,
 				8780EF04F43B32E57BEF9271 /* MarketProduct.swift */,
 				91EEFDD37EE10CF12F45AB23 /* MarketService.swift */,
+				D2294904572B4E00B44F6555 /* MarketReviewService.swift */,
 				172D3A9A94A4753F1ED16C62 /* MarketViewModel.swift */,
 				1978E4D0E1FBCAB29BB9945B /* AgriMarketView.swift */,
 				4C643F2E3FECBCA2C4E02406 /* MarketBuyView.swift */,
@@ -348,6 +353,71 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		55662F709CC14C96A22BC42E /* Farmer */ = {
+			isa = PBXGroup;
+			children = (
+				0A5DF6C357884A75B9701941 /* View */,
+				3B1FEC87E58142309AAFE449 /* ViewModel */,
+				D0FB254C87C14959854D3A9E /* Model */,
+			);
+			path = Farmer;
+			sourceTree = "<group>";
+		};
+		0A5DF6C357884A75B9701941 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DD8E72342FA8D5050005D254 /* HomeView.swift */,
+				DD8A31E42FBDFE010047776D /* DrawerView.swift */,
+				DD92F8E82FAB903E005EC045 /* FeatureCardView.swift */,
+				FC900A4784FF38B952CBF18C /* TutorialsView.swift */,
+				DE172061F95F0FDFEF9B6484 /* AboutView.swift */,
+				18E0C161CBF29A1FA3167F7A /* HelpView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		3B1FEC87E58142309AAFE449 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				DD92F8E62FAB8FBE005EC045 /* HomeViewModel.swift */,
+				6FCAC451489A0BE5224CCECC /* DrawerViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		D0FB254C87C14959854D3A9E /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				DD92F8DD2FAB8252005EC045 /* FeatureModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		20635088AD6848C09E1FF55E /* Seller */ = {
+			isa = PBXGroup;
+			children = (
+				BE28C67148094E278DE8D690 /* View */,
+				2ED3E88034C54EC8B6FB3BCC /* ViewModel */,
+			);
+			path = Seller;
+			sourceTree = "<group>";
+		};
+		BE28C67148094E278DE8D690 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F9AB63DDA70C4BBEBF1E4D56 /* SellerHomeView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		2ED3E88034C54EC8B6FB3BCC /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				2710260E3DCA488D8AF91923 /* SellerViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		DD8E72362FA8D5050005D254 /* DisasesClassificationApp */ = {
 			isa = PBXGroup;
 			children = (
@@ -355,6 +425,8 @@
 				DDBAF9122FD408A400460D18 /* Community */,
 				DDA658CD2F000020003137CE /* Weather */,
 				DDA658CE2F000021003137CE /* Chat */,
+				55662F709CC14C96A22BC42E /* Farmer */,
+				20635088AD6848C09E1FF55E /* Seller */,
 				DDB045DB2FAA0517002EA282 /* Home */,
 				DD8E724B2FA8EE350005D254 /* Constants */,
 				DD8E72462FA8ED050005D254 /* Authentication */,
@@ -400,7 +472,6 @@
 			isa = PBXGroup;
 			children = (
 				DD92F8D92FAB6ACB005EC045 /* WeatherModel.swift */,
-				DD92F8DD2FAB8252005EC045 /* FeatureModel.swift */,
 				DD92F8DB2FAB820B005EC045 /* WeatherDisplayModel.swift */,
 			);
 			path = Model;
@@ -540,10 +611,7 @@
 		DDB045DC2FAA0528002EA282 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				DD8E72342FA8D5050005D254 /* HomeView.swift */,
-				DD8A31E42FBDFE010047776D /* DrawerView.swift */,
 				DD8A31E62FBDFE4E0047776D /* MenuItem.swift */,
-				DD92F8E82FAB903E005EC045 /* FeatureCardView.swift */,
 				DD92F8EA2FAB907A005EC045 /* MainTabView.swift */,
 				DD92F8EC2FAC671E005EC045 /* WeatherCardView.swift */,
 			);
@@ -554,8 +622,6 @@
 			isa = PBXGroup;
 			children = (
 				DD92F8E42FAB8F60005EC045 /* WeatherViewModel.swift */,
-				DD92F8E62FAB8FBE005EC045 /* HomeViewModel.swift */,
-				6FCAC451489A0BE5224CCECC /* DrawerViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -768,9 +834,6 @@
 				7964F91532816EA9DA5A4C13 /* DrawerViewModel.swift in Sources */,
 				DDBAF90B2FD3DEE200460D18 /* DeepSeekService.swift in Sources */,
 				5B755B1CDFB4E1366F9B47EE /* SafariView.swift in Sources */,
-				42BFC41B2EDB915116D3E46F /* LocalizationManager.swift in Sources */,
-				DD73AC09F310F256028AEEDE /* LocalizedStrings.swift in Sources */,
-				067FA2E6C92C45F9BD87E97E /* LText.swift in Sources */,
 				8A6234837BD53C19345C605B /* ProfileView.swift in Sources */,
 				3197B780FB76C35772013310 /* TutorialsView.swift in Sources */,
 				64C232C48C92303B953288ED /* AboutView.swift in Sources */,
@@ -785,7 +848,10 @@
 				DD0000040000000000000004 /* MarketCheckoutView.swift in Sources */,
 				DD0000060000000000000006 /* MarketOrderConfirmationView.swift in Sources */,
 				E163611F43F9B34265BC46E2 /* SplashView.swift in Sources */,
-			);
+
+				8EDC96D7D7DE463F8F0FBFD8 /* MarketReviewService.swift in Sources */,
+				C324852CDB644740AF4FE481 /* SellerHomeView.swift in Sources */,
+				EB39695B16544E2093084323 /* SellerViewModel.swift in Sources */,			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
