@@ -53,15 +53,15 @@ flowchart TD
     E -->|Farmer| F["CreateAccount → role: farmer"]
     E -->|Seller| G["CreateAccount → role: seller"]
 
-    F --> H[Firestore: users/{uid}]
+    F --> H["Firestore: users/{uid}"]
     G --> H
 
-    H --> I[Coordinator.replaceStack: .homeView]
+    H --> I["Coordinator.replaceStack: .homeView"]
     I --> D
 
     D --> J{Role}
-    J -->|Farmer| K[Farmer tabs: Home, Market, Weather, Chat, Community]
-    J -->|Seller| L[Seller tabs: Dashboard single-tab view]
+    J -->|Farmer| K["Farmer: Home, Market, Weather, Chat, Community"]
+    J -->|Seller| L["Seller: Dashboard single-tab view"]
 ```
 
 ### Role Routing
@@ -156,7 +156,7 @@ flowchart TD
     A[Farmer receives order] --> B[MarketBuyView: rate button]
     B --> C[Review sheet: 1-5 stars + comment]
     C --> D[MarketReviewService.submitReview]
-    D --> E[Firestore: reviews/{auto-id}]
+    D --> E["Firestore: reviews/{auto-id}"]
     E --> F[Seller dashboard updates: avg rating, count]
 ```
 
