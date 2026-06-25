@@ -626,6 +626,12 @@ flowchart TD
 
 ---
 
+## Demo
+
+[![Demo Video](https://img.shields.io/badge/Watch%20Demo-Google%20Drive-4285F4?style=for-the-badge&logo=googledrive&logoColor=white)](https://drive.google.com/file/d/1BJQQnmXKqEkPV79vIu00p8PIkXuwFfIB/view?usp=sharing)
+
+---
+
 ## Target Users
 
 - **Bangladeshi farmers** — browse and buy agricultural products (seeds, medicines, fertilizers, equipment), diagnose diseases with AI, check spray weather
